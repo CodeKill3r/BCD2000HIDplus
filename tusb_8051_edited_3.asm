@@ -106,7 +106,7 @@ serBtoUsbMidOut:			; CODE XREF: RESET_0-306p
 		jb	GlobStat.3, presRxBuff ; 3: rx buff
 					; 4: tx	buff empty
 					; 6: enable response counter
-        jmp noRxBuff
+        ljmp noRxBuff
 presRxBuff:
 		mov	RAM_13,	#1	; ext RAM
 		mov	RAM_14,	#0F8h ;	'ř' ; usbMidiOutBufH
@@ -124,7 +124,8 @@ presRxBuff:
 		mov R6, #0 ;usb msg byte count
 midiOutCpLoop:				; CODE XREF: serBtoUsbMidOut+92j
 		mov A, RAM_12
-        jz endmidiOutCpLoop
+        jnz midibyteloop
+        ljmp endmidiOutCpLoop
         
 midibyteloop:
 		lcall	getMidiOutBuf	; read a MIDI_OUT_BUF byte to R7
@@ -195,18 +196,38 @@ midimsg:
 		inc R1
 		mov A, R7
 		lcall	writeAToBuff
+        
 		;midi byte2
+        ;jog fix  --- if msg is "B0 12 40" or "B0 13 40" then replace 40h with 3Fh
+        
+        mov A, RAM_1C
+        cjne A, #0B0h, nojog
+        cjne R7, #13h, nodeckb
+        dec R7
+nodeckb:
+        cjne R7, #12h, nojog
+
+		lcall	readMidiOutBuf			
+		inc R1
+		mov A, R7
+        cjne A, #40h, notjogrev
+        dec A
+notjogrev:        
+		lcall	writeAToBuff
+        sjmp usbmsglen
+nojog:        
 		lcall	readMidiOutBuf			
 		inc R1
 		mov A, R7
 		lcall	writeAToBuff
-		
+
+usbmsglen:		
 		;usb message length
 		mov A, R6
 		add A, #4
 		mov R6, A
 					
-		sjmp	midiOutCpLoop
+		ljmp	midiOutCpLoop
         
 endmidiOutRlLoop:
 		add A, #2

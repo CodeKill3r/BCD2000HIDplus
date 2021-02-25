@@ -11,4 +11,4 @@ MIDI handlers has been rewritten to understand and produce proper USB-MIDI messa
 
 You have to open the controller and reprogram the EEPROM inside to apply this firmware.
 
-Thanks to Davy for sharing his step by step guide https://davy.cf/bcd2000
+Thanks to Davy for sharing his step by step guide: https://davy.cf/bcd2000

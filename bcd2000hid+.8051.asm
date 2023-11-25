@@ -1,3 +1,4 @@
+
 ; File Name   :	tusb_8051_raw.bin
 ; Format      :	Binary file
 ; Base Address:	0000h Range: 0000h - 0C16h Loaded length: 0C16h
@@ -83,20 +84,102 @@ RI_TI:
 
 ; =============== S U B	R O U T	I N E =======================================
 
-
 serBtoUsbMidOut:			; CODE XREF: RESET_0-306p
-		clr	GlobStat.6	; 3: rx	buff
+
+;new code to build MIDI messages to USB sandard
+
+;there are only 3 types of messages supported:
+;  -note on
+;  -note off
+;  -control change
+; all are 3 bytes converted to 4 UsB message bytes
+; only accept if there are at least 3 bytes in the serial buffer
+;
+; need to purge incomplete data***
+;  need to handle running status (same message type) ---> note off = note on /w velocity=0
+;  
+;
+; MIDI IN embedded bJackID (CN) = 1
+
+
+
+		jb	GlobStat.3, presRxBuff ; 3: rx buff
 					; 4: tx	buff empty
 					; 6: enable response counter
+        ljmp noRxBuff
+presRxBuff:
 		mov	RAM_13,	#1	; ext RAM
 		mov	RAM_14,	#0F8h ;	'ř' ; usbMidiOutBufH
 		mov	RAM_15,	#50h ; 'P' ; usbMidiOutBufL
-		jnb	GlobSt2t.4, code_7A ; 4: setup long response
-					; 5: debug response
 		mov	R3, RAM_13
 		mov	R2, RAM_14
-		mov	R1, RAM_15	; 0 byte -- 0
-		clr	A		; clr @(usbMidiOutBuf)
+		mov	R1, RAM_15
+
+
+	    ; if size rx buff size < 3 then return (no complete message)
+		lcall	getRxBuf_size
+		mov	RAM_12,	R7	;midi buff size
+		
+		;find midi msg head byte (90 80 or  B0)
+		mov R6, #0 ;usb msg byte count
+midiOutCpLoop:				; CODE XREF: serBtoUsbMidOut+92j
+		mov A, RAM_12
+        jnz midibyteloop
+        ljmp endmidiOutCpLoop
+        
+midibyteloop:
+		lcall	getMidiOutBuf	; read a MIDI_OUT_BUF byte to R7
+                                ; 0xFF if empty
+        ;process data
+        mov A, R7
+        jb ACC.7, midictrl    ;jump if midi status byte present (need 3 bytes)
+        ;otherwise it is a rolling status (only need 2 bytes)
+        mov A, RAM_12
+        clr C
+        subb A, #2
+        jc endmidiOutRlLoop     ;not enough data in buffer
+        mov A, RAM_1C
+        mov R7, RAM_1C        
+		sjmp midimsg            ;this will decrement the size properly
+midictrl:       ;midi control/status byte found
+        mov A, RAM_12
+        clr C
+        subb A, #3
+        jc endmidiOutCpLoop     ;not enough data in buffer
+        dec RAM_12
+        lcall	readMidiOutBuf  ; already know this, but this will step the pointers properly
+		cjne R7, #80h, notNoteOff
+        ;note off  --- may not be present -- used instead note on /w velocity=0
+		sjmp midimsg        
+
+notNoteOff:
+		cjne R7, #90h, notNoteOn
+		;note on
+		sjmp midimsg
+notNoteOn:
+		cjne R7, #0B0h, notCC
+		;control change
+		sjmp midimsg		
+notCC:
+		mov A, RAM_12
+		jz endmidiOutCpLoop
+		sjmp midibyteloop
+		;if (R6) && (RAM_11+R6 < RAM_12)	-- removed -- wait for enough bytes instead
+			;remaining bytes		
+		;else 
+			;remove byte and loop
+midimsg:
+		clr C
+		mov A, RAM_12
+		subb A, #2
+		jc endmidiOutCpLoop ; msg too small, wait for more bytes
+		mov RAM_12, A
+		;usb header byte
+		mov A, R7
+        mov RAM_1C, A
+		;add A, #2
+		swap A
+			
 		lcall	writeAToBuff	; R2 ptrH
 					; R1 ptrL
 					; R3 mode select:
@@ -104,202 +187,73 @@ serBtoUsbMidOut:			; CODE XREF: RESET_0-306p
 					;  0x01	- write	ext RAM	(R2:R1)
 					;  0xFE	- write	ext RAM	(R1)
 					;  other - no write
-		mov	R3, RAM_13
-		mov	R2, RAM_14
-		mov	R1, RAM_15	; 8 byte -- 0
-		mov	DPTR, #8	; clr @(usbMidiOutBuf+8)
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		mov	DPTR, #10h	; 0x10 byte -- 0xFF
-		mov	A, #0FFh	; @(usbMidiOutBuf+0x10)= 0xFF
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		mov	DPTR, #11h	; 0x11 byte -- 0xFF
-		mov	A, #0FFh	; @(usbMidiOutBuf+0x11)= 0xFF
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		mov	DPTR, #13h	; 0x13 byte -- 0
-		clr	A
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		mov	DPTR, #14h	; 0x14 byte -- 0 = no debug
-		clr	A
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		clr	GlobSt2t.4	; 4: setup long	response
-					; 5: debug response
-		mov	DPTR, #16h
-		mov	A, #1
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		mov	DPTR, #17h	; 0x17 byte -- 3
-		mov	A, #3
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
+		;midi byte0
+		inc R1
+		mov A, R7
+		lcall	writeAToBuff
+		;midi byte1
+		lcall	readMidiOutBuf			
+		inc R1
+		mov A, R7
+		lcall	writeAToBuff
+        
+		;midi byte2
+        ;jog fix  --- if msg is "B0 12 40" or "B0 13 40" then replace 40h with 3Fh
+        
+        mov A, RAM_1C
+        cjne A, #0B0h, nojog
+        cjne R7, #13h, nodeckb
+        dec R7
+nodeckb:
+        cjne R7, #12h, nojog
 
-code_7A:				; CODE XREF: serBtoUsbMidOut+Bj
-		jnb	GlobStat.3, code_C5 ; 3: rx buff
-					; 4: tx	buff empty
-					; 6: enable response counter
+		lcall	readMidiOutBuf			
+		inc R1
+		mov A, R7
+        cjne A, #40h, notjogrev
+        dec A
+notjogrev:        
+		lcall	writeAToBuff
+        sjmp usbmsglen
+nojog:        
+		lcall	readMidiOutBuf			
+		inc R1
+		mov A, R7
+		lcall	writeAToBuff
+
+usbmsglen:		
+		;usb message length
+		mov A, R6
+		add A, #4
+		mov R6, A
+					
+		ljmp	midiOutCpLoop
+        
+endmidiOutRlLoop:
+		add A, #2
+		jnz leftinbuff      
 		clr	GlobStat.3	; 3: rx	buff
 					; 4: tx	buff empty
 					; 6: enable response counter
-		lcall	getRxBuf_size
-		mov	RAM_12,	R7
-		mov	A, RAM_12
-		jz	code_C5		; rx buffer size = 0
-		setb	GlobStat.6	; 3: rx	buff
+        sjmp leftinbuff
+        
+endmidiOutCpLoop:
+		add A, #3
+		jnz leftinbuff      
+		clr	GlobStat.3	; 3: rx	buff
 					; 4: tx	buff empty
 					; 6: enable response counter
-		clr	A
-		mov	RAM_11,	A
-
-midiOutCpLoop:				; CODE XREF: serBtoUsbMidOut+92j
-		mov	A, RAM_11
-		clr	C
-		subb	A, RAM_12
-		jnc	code_BA		; jmp if RAM_11	(buff_ptr) > RAM_12 (buff_length)
-		mov	A, RAM_11
-		clr	C
-		subb	A, #7
-		jnc	code_BA		; jmp if RAM_11	(buff_ptr) > 7
-		lcall	readMidiOutBuf	; read a MIDI_OUT_BUF byte to R7
-					;    inc SerMidiOutPtr
-					; 0xFF if empty
-		mov	R3, RAM_13
-		mov	A, RAM_15	; ptrL
-		add	A, #1
-		mov	R1, A
-		clr	A
-		addc	A, RAM_14	; ptrH
-		mov	R2, A		; R2:R1=RAM_14:RAM_15+1
-		mov	A, RAM_11
-		mov	R4, #0
-		add	A, R1
-		mov	R1, A
-		mov	A, R4
-		addc	A, R2
-		mov	R2, A		; R2:R1+=RAM_11	(buff_ptr)
-		mov	A, R7
-		lcall	writeAToBuff	; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		inc	RAM_11
-		sjmp	midiOutCpLoop
-; ---------------------------------------------------------------------------
-
-code_BA:				; CODE XREF: serBtoUsbMidOut+6Cj
-					; serBtoUsbMidOut+73j
-		mov	R3, RAM_13
-		mov	R2, RAM_14
-		mov	R1, RAM_15
-		mov	A, RAM_11	; 0 byte -- response MIDI length (1-8)
-		lcall	writeAToBuff	; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-
-code_C5:				; CODE XREF: serBtoUsbMidOut:code_7Aj
-					; serBtoUsbMidOut+60j
-		jnb	GlobSt2t.5, code_DA ; 4: setup long response
-					; 5: debug response
-		clr	GlobSt2t.5	; 4: setup long	response
-					; 5: debug response
-		mov	R3, RAM_13
-		mov	R2, RAM_14
-		mov	R1, RAM_15
-		mov	DPTR, #14h	; 0x14 byte -- 0xF3 = debug response
-		mov	A, #0F3h ; 'ó'
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		setb	GlobStat.6	; 3: rx	buff
-					; 4: tx	buff empty
-					; 6: enable response counter
-
-code_DA:				; CODE XREF: serBtoUsbMidOut:code_C5j
-		jnb	GlobStat.6, code_F6 ; 3: rx buff
-					; 4: tx	buff empty
-					; 6: enable response counter
-		mov	R7, RAM_1C
-		inc	RAM_1C
-		mov	R3, RAM_13
-		mov	R2, RAM_14
-		mov	R1, RAM_15
-		mov	DPTR, #12h	; 0x12 byte -- debug counter
-		mov	A, R7		; rolling counter @ 0x12
-		lcall	writeAToBuDPTR	; Write	A to (R2:R1)+DPTR or R1+DPL
-					; R2 ptrH
-					; R1 ptrL
-					; R3 mode select:
-					;  0x00	- write	RAM (R1)
-					;  0x01	- write	ext RAM	(R2:R1)
-					;  0xFE	- write	ext RAM	(R1)
-					;  other - no write
-		setb	GlobSt2t.4	; 4: setup long	response
-					; 5: debug response
+leftinbuff:		
+		mov A, R6
+		jz noRxBuff
 		mov	DPTR, #IEPDCNTX1 ; In endpoint 1 - X buffer data count byte
-		mov	A, #3Ch	; '<'   ; data counter = 0x3C
+		mov	A, R6; '<'   ; data counter = 0x3C
 					; no NACK
 		movx	@DPTR, A
+		
 
-code_F6:				; CODE XREF: serBtoUsbMidOut:code_DAj
-		ret
-; End of function serBtoUsbMidOut
+noRxBuff:
+		ret;
 
 
 ; =============== S U B	R O U T	I N E =======================================
@@ -470,69 +424,19 @@ usbMidiInToSerB:			; CODE XREF: RESET_0-310p
 
 oep1_nack:				; CODE XREF: usbMidiInToSerB+8j
 		anl	RAM_11,	#7Fh ; '' ; X buff count
+        mov A, RAM_11
+        cjne A, #04h, clrBuff   ;accept only 4 byte messages
+
 		mov	DPTR, #usbBufMidiIn ; @(OEPBBAX1) -- message type:
-					; 3 -- MIDI message
-					; 7 -- usb response debug enable ?
-					; 9 -- set mic en/dis
-					; 0x23 -- fw update
-					; A or any other -- dummy data/empty
-		movx	A, @DPTR
-		mov	RAM_14,	A
-		mov	A, RAM_11
-		setb	C
-		subb	A, #10h
-		jnc	code_1D3	; jump if X buff cnt > 0x10
-		ljmp	clrBuff
-; ---------------------------------------------------------------------------
-
-code_1D3:				; CODE XREF: usbMidiInToSerB+1Cj
-		mov	A, RAM_14
-		xrl	A, #3
-		jnz	usbBmidiNot3	; @(usbBufMidiIn) != 0x03    (possible HID mode?)
-					; 9==set mic mode -- @(usbBufMidiIn+2)>0 == mic	enabled
-					; A==dummy data/empty
-					; 0x23==fw update
-		mov	DPTR, #usbMidiLen ; @(usbBufMidiIn+2) -- midi message length
-		movx	A, @DPTR
-		mov	RAM_11,	A
-		clr	A
-		mov	RAM_12,	A
-
-midiInCpLoop:				; CODE XREF: usbMidiInToSerB+74j
-		mov	A, RAM_12
-		clr	C
-		subb	A, RAM_11
-		jnc	clrBuff		; jump if RAM_12 >= @(usbBufMidiIn+2)
-		mov	A, #13h
-		add	A, RAM_12
-		mov	DPL, A		; Data Pointer,	Low Byte
-		clr	A
-		addc	A, #0F8h ; 'ř'
-		mov	DPH, A		; Data Pointer,	High Byte
-		movx	A, @DPTR	; usbBufMidiIn+3 + RAM_12
-		mov	RAM_13,	A
-		jnb	ACC.7, code_207	; Midi data byte
-		cjne	A, #0C0h, code_201 ; 'Ŕ' ; jmp if not MIDI ch0 Program change message
-		mov	R7, #1
-		sjmp	code_203
-; ---------------------------------------------------------------------------
-
-code_201:				; CODE XREF: usbMidiInToSerB+48j
-		mov	R7, #0
-
-code_203:				; CODE XREF: usbMidiInToSerB+4Dj
-		mov	pgmchng, R7	; store	for later if it	was a Pgm chng or not
-		sjmp	nopgmchg
-; ---------------------------------------------------------------------------
-
-code_207:				; CODE XREF: usbMidiInToSerB+45j
-		mov	A, RAM_13
-		clr	C
-		subb	A, #2
-		jnc	nopgmchg	; jmp if RAM_13>1
-		mov	A, pgmchng
-		jz	nopgmchg	; jmp if there was no Midi ch0 Pgm chng	message
-		mov	A, RAM_13
+        movx	A, @DPTR        ;USB header byte
+        anl A, #0Fh
+        cjne A, #0Ch, txNormal   ;if not program change, just dump to serial buffer
+        inc DPL
+        movx	A, @DPTR        ;midi status/command byte (midi byte0)
+        mov R7, A
+        lcall	writeMidiInBuf
+        inc DPL
+        movx	A, @DPTR        ;midi byte1
 		setb	C
 		subb	A, #0
 		jc	code_21C
@@ -545,45 +449,25 @@ code_21C:				; CODE XREF: usbMidiInToSerB+65j
 
 code_21D:				; CODE XREF: usbMidiInToSerB+68j
 		mov	P1.1, C		; set mic mode
-
-nopgmchg:				; CODE XREF: usbMidiInToSerB+53j
-					; usbMidiInToSerB+5Aj ...
-		mov	R7, RAM_13
-		lcall	writeMidiInBuf	; write	R7 to MIDI_IN_BUF
-					;    inc SerMidiInPtr
-		inc	RAM_12
-		sjmp	midiInCpLoop
-; ---------------------------------------------------------------------------
-
-usbBmidiNot3:				; CODE XREF: usbMidiInToSerB+25j
-		mov	A, RAM_14
-		cjne	A, #7, micmode
-		setb	GlobSt2t.5	; usb response debug enable ?
-		sjmp	clrBuff
-; ---------------------------------------------------------------------------
-
-micmode:				; CODE XREF: usbMidiInToSerB+78j
-		mov	A, RAM_14
-		cjne	A, #9, usbBmidiNot9
-		mov	DPTR, #0F812h
-		movx	A, @DPTR
-		jnz	micenable	; jmp if @(usbBuffMidi+2) > 0
-		clr	P1.1		; mic disabled
-		sjmp	clrBuff
-; ---------------------------------------------------------------------------
-
-micenable:				; CODE XREF: usbMidiInToSerB+88j
-		setb	P1.1		; mic enabled
-		sjmp	clrBuff
-; ---------------------------------------------------------------------------
-
-usbBmidiNot9:				; CODE XREF: usbMidiInToSerB+81j
-		mov	A, RAM_14
-		xrl	A, #0Ah
-		jz	clrBuff
-		mov	A, RAM_14
-		cjne	A, #23h, clrBuff ; '#'
-		lcall	fwUpdate
+        addc A, #0
+        sjmp txRest
+        
+        
+txNormal:
+        inc DPL
+        movx	A, @DPTR
+        mov R7, A
+        lcall	writeMidiInBuf
+        inc DPL
+        movx	A, @DPTR
+txRest:        
+        mov R7, A
+        lcall	writeMidiInBuf
+        inc DPL
+        movx	A, @DPTR
+        mov R7, A
+        lcall	writeMidiInBuf
+ 
 
 clrBuff:				; CODE XREF: usbMidiInToSerB+1Ej
 					; usbMidiInToSerB+35j ...
@@ -946,7 +830,8 @@ usb_init:				; CODE XREF: RESET_0-333p
 		inc	DPTR		; ACGFRQ1
 		mov	A, #4Bh	; 'K'
 		movx	@DPTR, A
-		inc	DPTR		; ACGFRQ0  --  26.5734MHz
+		inc	DPTR		; ACGFRQ0  --  N=26.5734 --> MCLKO= (25/N)*(192/8)=22.5792MHz
+						;(CS4220 @ 44100 Hz)
 		mov	A, #20h	; ' '
 		movx	@DPTR, A
 		mov	DPTR, #ACGDCTL	; Adaptive clock generator divider control register
@@ -1315,72 +1200,384 @@ code_5D5:				; CODE XREF: fwUpdate+84j
 ; End of function fwUpdate
 
 ; ---------------------------------------------------------------------------
+;Device Descriptor:
 dev_descr:	db 12h			; DATA XREF: usbreqgetdescr+18o
 					; usbreqgetdescr+1Bo ...
 		db    1
-		db    0
-		db    1
+		db    10h ;bcdUSB 1.10 -  .10
+		db    1  ;bcdUSB 1.10 - 1.
 		db    0
 		db    0
 		db    0
 		db    8
 		db  97h	; —
 		db  13h
-		db 0BDh	; ˝
+		db 0BEh	; PID between original BCD2000 and BCD3000
 		db    0
 		db    0
 		db    0
-		db    1
-		db    2
+		db    1	; iManufacturer --- Behringer
+		db    2 ; iProduct --- BCD2000HID+
 		db    0
 		db    1
-conf_descr:	db    9			; DATA XREF: usbreqgetdescr+18o
-					; usbreqgetdescr+1Bo ...
-		db    2
-		db  2Eh	; .
-		db    0
-		db    1
-		db    1
-		db    0
-		db  80h	; €
-		db  32h	; 2
-intf_descr:	db    9
-		db    4
-		db    0
-		db    0
-		db    4
-		db 0FFh
-		db    0
-		db    0
-		db    0
-ep_descr_01_ito:db    7
-		db    5
-		db    1
-		db    3
-		db  40h	; @
-		db    0
-		db    1
-ep_descr_81_iti:db    7
-		db    5
-		db  81h	; 
-		db    3
-		db  40h	; @
-		db    0
-		db    1
-ep_descr_02_iso:db    7
-		db    5
-		db    2
-		db    1
-		db  80h	; €
-		db    1
-		db    1
-ep_descr_83_isi:db    7
-		db    5
-		db  83h	; 
-		db    1
-		db  80h	; €
-		db    1
-		db    1
+;Configuration Descriptor:
+conf_descr:	db    9	;bLength		; DATA XREF: usbreqgetdescr+18o
+									; usbreqgetdescr+1Bo ...
+		db    2 ;bDescriptorType
+		db  low(string_descr-conf_descr);   2Eh	;wTotalLength_L
+		db  high(string_descr-conf_descr);  0 ;wTotalLength_H
+		db    5 ;bNumInterfaces
+		db    1 ;bConfigurationValue
+		db    0 ;iConfiguration
+		db  80h	;bmAttributes  (bus powered)
+		db  32h	;bMaxPower  (100mA)
+
+;///////Audio Interfaces
+
+
+;Interface Descriptor:
+intf_descr:	db    9 ;bLength
+		db    4 ;bDescriptorType
+		db    0 ;bInterfaceNumber
+		db    0 ;bAlternateSetting
+		db    0 ;bNumEndpoints
+		db 	  1 ;bInterfaceClass  -- Audio
+		db    1 ;bInterfaceSubClass  -- Control Device
+		db    0 ;bInterfaceProtocol
+		db    3 ;iInterface  -- BCD2000Audio
+;AudioControl Interface Descriptor:
+db 10;        bLength                10
+db 36;        bDescriptorType        36
+db 1;         bDescriptorSubtype      1 (HEADER)
+db 0;         bcdADC               1.00
+db 1;
+db 52;        wTotalLength           52
+db 0;
+db 2;         bInCollection           2
+db 2;         baInterfaceNr( 0)       2
+db 1;         baInterfaceNr( 1)       1
+;AudioControl Interface Descriptor:
+db 12;        bLength                12
+db 36;        bDescriptorType        36
+db 2;         bDescriptorSubtype      2 (INPUT_TERMINAL)
+db 3;         bTerminalID             3
+db 03h;        wTerminalType      0x0603 Line Connector
+db 06h;
+db 0;         bAssocTerminal          0
+db 4;         bNrChannels             4
+db 00h;        wChannelConfig     0x0f00
+db 33h;
+;          Left Front (L)
+;          Right Front (R)
+;          Left Surround (LS)
+;          Right Surround (RS)
+db 4;  BCD2000 In        iChannelNames           5 VCI 300 In
+db 4;  BCD2000 In        iTerminal               5 VCI 300 In
+;AudioControl Interface Descriptor:
+db 9;         bLength                 9
+db 36;        bDescriptorType        36
+db 3;         bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+db 4;         bTerminalID             4
+db 01h;        wTerminalType      0x0101 USB Streaming
+db 01h;
+db 0;         bAssocTerminal          0
+db 3;         bSourceID               3
+db 4; BCD2000 In        iTerminal               5 VCI 300 In
+;AudioControl Interface Descriptor:
+db 12;        bLength                12
+db 36;        bDescriptorType        36
+db 2;         bDescriptorSubtype      2 (INPUT_TERMINAL)
+db 1;         bTerminalID             1
+db 01h;        wTerminalType      0x0101 USB Streaming
+db 01h;
+db 0;         bAssocTerminal          0
+db 4;         bNrChannels             4
+db 00h;        wChannelConfig     0x3300
+db 33h;
+;          Left Front (L)
+;          Right Front (R)
+;          Left Surround (LS)
+;          Right Surround (RS)
+db 5; BCD2000 Out        iChannelNames           9 VCI 300 Out
+db 5; BCD2000 Out        iTerminal               9 VCI 300 Out
+;AudioControl Interface Descriptor:
+db 9;         bLength                 9
+db 36;        bDescriptorType        36
+db 3;         bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+db 2;         bTerminalID             2
+db 01h;        wTerminalType      0x0301 Speaker
+db 03h;
+db 0;         bAssocTerminal          0
+db 1;         bSourceID               1
+db 5; BCD2000 Out        iTerminal               9 VCI 300 Out
+;Interface Descriptor:
+db 9;      bLength                 9
+db 4;      bDescriptorType         4
+db 1;      bInterfaceNumber        1
+db 0;      bAlternateSetting       0
+db 0;      bNumEndpoints           0
+db 1;      bInterfaceClass         1 Audio
+db 2;      bInterfaceSubClass      2 Streaming
+db 0;      bInterfaceProtocol      0
+db 7; BCD2000 Out Idle      iInterface              7 VCI 300 Out Idle
+;Interface Descriptor:
+db 9;      bLength                 9
+db 4;      bDescriptorType         4
+db 1;      bInterfaceNumber        1
+db 1;      bAlternateSetting       1
+db 1;      bNumEndpoints           1
+db 1;      bInterfaceClass         1 Audio
+db 2;      bInterfaceSubClass      2 Streaming
+db 0;      bInterfaceProtocol      0
+db 5; BCD2000 Out      iInterface              9 VCI 300 Out
+;AudioStreaming Interface Descriptor:
+db 7;        bLength                 7
+db 36;        bDescriptorType        36
+db 1;        bDescriptorSubtype      1 (AS_GENERAL)
+db 1;        bTerminalLink           1
+db 1;        bDelay                  1 frames
+db 1;        wFormatTag              1 PCM
+db 0;
+;AudioStreaming Interface Descriptor:
+db 11;        bLength                11
+db 36;        bDescriptorType        36
+db 2;         bDescriptorSubtype      2 (FORMAT_TYPE)
+db 1;         bFormatType             1 (FORMAT_TYPE_I)
+db 4;         bNrChannels             4
+db 2;         bSubframeSize           2
+db 16;        bBitResolution         16
+db 1;         bSamFreqType            1 Discrete
+db 44h;        tSamFreq[ 0]        44100
+db 0ACh;
+db 0;
+;Endpoint Descriptor:
+db 9;         bLength                 9
+db 5;         bDescriptorType         5
+db 2;    EP2     bEndpointAddress     0x02  EP 2 OUT
+db 9;         bmAttributes            9
+;          Transfer Type            Isochronous
+;          Synch Type               Adaptive
+;          Usage Type               Data
+db 80h;    384    wMaxPacketSize     0x0170  1x 368 bytes
+db 01h;
+db 1;         bInterval               1
+db 0;         bRefresh                0
+db 0;         bSynchAddress           0
+;AudioControl Endpoint Descriptor:
+db 7;           bLength                 7
+db 37;          bDescriptorType        37
+db 1;           bDescriptorSubtype      1 (EP_GENERAL)
+db 1;           bmAttributes         0x01
+;            Sampling Frequency
+db 0;           bLockDelayUnits         0 Undefined
+db 0;           wLockDelay              0 Undefined
+db 0;
+;Interface Descriptor:
+db 9;       bLength                 9
+db 4;       bDescriptorType         4
+db 2;       bInterfaceNumber        2
+db 0;       bAlternateSetting       0
+db 0;       bNumEndpoints           0
+db 1;       bInterfaceClass         1 Audio
+db 2;       bInterfaceSubClass      2 Streaming
+db 0;       bInterfaceProtocol      0
+db 6; BCD2000 In Idle      iInterface              3 VCI 300 In Idle
+;Interface Descriptor:
+db 9;       bLength                 9
+db 4;       bDescriptorType         4
+db 2;       bInterfaceNumber        2
+db 1;       bAlternateSetting       1
+db 1;       bNumEndpoints           1
+db 1;       bInterfaceClass         1 Audio
+db 2;       bInterfaceSubClass      2 Streaming
+db 0;       bInterfaceProtocol      0
+db 4; BCD2000 In      iInterface              5 VCI 300 In
+;AudioStreaming Interface Descriptor:
+db 7;         bLength                 7
+db 36;        bDescriptorType        36
+db 1;         bDescriptorSubtype      1 (AS_GENERAL)
+db 4;         bTerminalLink           4
+db 1;         bDelay                  1 frames
+db 1;         wFormatTag              1 PCM
+db 0;
+;AudioStreaming Interface Descriptor:
+db 11;        bLength                11
+db 36;        bDescriptorType        36
+db 2;         bDescriptorSubtype      2 (FORMAT_TYPE)
+db 1;         bFormatType             1 (FORMAT_TYPE_I)
+db 4;         bNrChannels             4
+db 2;         bSubframeSize           2
+db 16;        bBitResolution         16
+db 1;         bSamFreqType            1 Discrete
+db 44h;        tSamFreq[ 0]        44100
+db 0ACh;
+db 0;
+;Endpoint Descriptor:
+db 9;         bLength                 9
+db 5;         bDescriptorType         5
+db 83h; EP0x83       bEndpointAddress     0x83  EP 3 IN
+db 9;         bmAttributes            9
+;          Transfer Type            Isochronous
+;          Synch Type               Adaptive
+;          Usage Type               Data
+db 80h;   384     wMaxPacketSize     0x0170  1x 368 bytes
+db 1;
+db 1;         bInterval               1
+db 0;         bRefresh                0
+db 0;         bSynchAddress           0
+;AudioControl Endpoint Descriptor:
+db 7;           bLength                 7
+db 37;          bDescriptorType        37
+db 1;           bDescriptorSubtype      1 (EP_GENERAL)
+db 1;           bmAttributes         0x01
+;            Sampling Frequency
+db 0;           bLockDelayUnits         0 Undefined
+db 0;           wLockDelay              0 Undefined
+db 0;
+
+;//////MIDI Interfaces
+
+;Interface Descriptor:
+db 9;       bLength                 9
+db 4;       bDescriptorType         4
+db 3;       bInterfaceNumber        3
+db 0;       bAlternateSetting       0
+db 0;       bNumEndpoints           0
+db 1;       bInterfaceClass         1 Audio
+db 1;       bInterfaceSubClass      1 Control Device
+db 0;       bInterfaceProtocol      0
+db 8;  BCD2000MIDI     iInterface             19 VCI 300 DJ Controller
+;AudioControl Interface Descriptor:
+db 9;         bLength                 9
+db 36;        bDescriptorType        36
+db 1;         bDescriptorSubtype      1 (HEADER)
+db 0;         bcdADC               1.00
+db 1;
+db 9;         wTotalLength            9
+db 0;
+db 1;         bInCollection           1
+db 4;         baInterfaceNr( 0)       4
+;Interface Descriptor:
+db 9;       bLength                 9
+db 4;       bDescriptorType         4
+db 4;       bInterfaceNumber        4
+db 0;       bAlternateSetting       0
+db 2;       bNumEndpoints           2
+db 1;       bInterfaceClass         1 Audio
+db 3;       bInterfaceSubClass      3 MIDI Streaming
+db 0;       bInterfaceProtocol      0
+db 8; BCD2000MIDI      iInterface             19 VCI 300 DJ Controller
+;MIDIStreaming Interface Descriptor:
+db 7;         bLength                 7
+db 36;        bDescriptorType        36
+db 1;         bDescriptorSubtype      1 (HEADER)
+db 0;         bcdADC               1.00
+db 1;
+db 65;        wTotalLength           65
+db 0;
+;MIDIStreaming Interface Descriptor:
+db 6;         bLength                 6
+db 36;        bDescriptorType        36
+db 2;         bDescriptorSubtype      2 (MIDI_IN_JACK)
+db 1;         bJackType               1 Embedded
+db 1;         bJackID                 1
+db 9; BCD2000MIDI_IN        iJack                  19 VCI 300 DJ Controller
+;MIDIStreaming Interface Descriptor:
+db 9;         bLength                 9
+db 36;        bDescriptorType        36
+db 3;         bDescriptorSubtype      3 (MIDI_OUT_JACK)
+db 2;         bJackType               2 External
+db 2;         bJackID                 2
+db 1;         bNrInputPins            1
+db 1;         baSourceID( 0)          1
+db 1;         BaSourcePin( 0)         1
+db 0Ah; BCD2000MIDI_OUT        iJack                  19 VCI 300 DJ Controller
+;MIDIStreaming Interface Descriptor:
+db 6;         bLength                 6
+db 36;        bDescriptorType        36
+db 2;         bDescriptorSubtype      2 (MIDI_IN_JACK)
+db 2;         bJackType               2 External
+db 3;         bJackID                 3
+db 9; BCD2000MIDI_IN        iJack                  19 VCI 300 DJ Controller
+;MIDIStreaming Interface Descriptor:
+db 9;         bLength                 9
+db 36;        bDescriptorType        36
+db 3;         bDescriptorSubtype      3 (MIDI_OUT_JACK)
+db 1;         bJackType               1 Embedded
+db 4;         bJackID                 4
+db 1;         bNrInputPins            1
+db 3;         baSourceID( 0)          3
+db 1;         BaSourcePin( 0)         1
+db 0Ah; BCD2000MIDI_OUT        iJack                  19 VCI 300 DJ Controller
+;Endpoint Descriptor:
+db 9;         bLength                 9
+db 5;         bDescriptorType         5
+db 1; EP1 out        bEndpointAddress     0x05  EP 5 OUT
+db 2;        bmAttributes            2
+;          Transfer Type            Bulk
+;          Synch Type               None
+;          Usage Type               Data
+db 40h;        wMaxPacketSize     0x0040  1x 64 bytes
+db 00h;
+db 0;          bInterval               0
+db 0;          bRefresh                0
+db 0;          bSynchAddress           0
+;MIDIStreaming Endpoint Descriptor:
+db 5;           bLength                 5
+db 37;          bDescriptorType        37
+db 1;           bDescriptorSubtype      1 (GENERAL)
+db 1;           bNumEmbMIDIJack         1
+db 1;           baAssocJackID( 0)       1
+;Endpoint Descriptor:
+db 9;         bLength                 9
+db 5;         bDescriptorType         5
+db 81h; EP1 IN        bEndpointAddress     0x85  EP 5 IN
+db 2;         bmAttributes            2
+;          Transfer Type            Bulk
+;          Synch Type               None
+;          Usage Type               Data
+db 40h;        wMaxPacketSize     0x0040  1x 64 bytes
+db 00h;
+db 0;         bInterval               0
+db 0;         bRefresh                0
+db 0;         bSynchAddress           0
+;MIDIStreaming Endpoint Descriptor:
+db 5;           bLength                 5
+db 37;          bDescriptorType        37
+db 1;           bDescriptorSubtype      1 (GENERAL)
+db 1;           bNumEmbMIDIJack         1
+db 4;           baAssocJackID( 0)       4
+
+
+
+; ep_descr_01_ito:db    7
+		; db    5
+		; db    1
+		; db    3
+		; db  40h	; @
+		; db    0
+		; db    1
+; ep_descr_81_iti:db    7
+		; db    5
+		; db  81h	; 
+		; db    3
+		; db  40h	; @
+		; db    0
+		; db    1
+; ep_descr_02_iso:db    7
+		; db    5
+		; db    2
+		; db    1
+		; db  80h	; €
+		; db    1
+		; db    1
+; ep_descr_83_isi:db    7
+		; db    5
+		; db  83h	; 
+		; db    1
+		; db  80h	; €
+		; db    1
+		; db    1
 string_descr:	db    4			; DATA XREF: usbreqgetdescr:usbgetconfo
 					; usbreqgetdescr+3Ao ...
 					; bLength
@@ -1397,8 +1594,46 @@ strBcd2000:	db  1Ah			; DATA XREF: usbstrdesc+25o
 					; usbstrdesc+27o ...
 					; bLength
 		db    3			; bDescriptorType
-aBcd2000:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,' ',0,' ',0,' ',0,' ',0,' ',0
+aBcd2000h:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,'H',0,'I',0,'D',0,'+',0,' ',0
 
+strBcd2000Aud:	db  1Ch		; bLength
+			db    3		; bDescriptorType
+aBcd2000au:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,'+',0,'A',0,'u',0,'d',0,'i',0,'o',0
+
+strBcd2000In:	db  1Ah		; bLength
+			db    3		; bDescriptorType
+aBcd2000ai:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,' ',0,'I',0,'n',0,' ',0,' ',0
+
+strBcd2000Out:	db  1Ah		; bLength
+			db    3		; bDescriptorType
+aBcd2000ao:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,' ',0,'O',0,'u',0,'t',0,' ',0
+
+
+strBcd2000InIdl:	db  22h		; bLength
+			db    3		; bDescriptorType
+aBcd2000aii: db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,' ',0,'I',0,'n',0,' ',0,'I',0,'d',0,'l',0,'e',0,' ',0
+
+strBcd2000OutIdl:	db  22h		; bLength
+			db    3		; bDescriptorType
+aBcd2000aoi: db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,' ',0,'O',0,'u',0,'t',0,' ',0,'I',0,'d',0,'l',0,'e',0
+
+strBcd2000Midi:	db  1Ah		; bLength
+			db    3		; bDescriptorType
+aBcd2000md:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,'+',0,'M',0,'I',0,'D',0,'I',0
+
+strBcd2000MidiIn:	db  24h	; $		; DATA XREF: usbstrdesc+12o
+					; usbstrdesc+14o ...
+					; bLength
+		db    3			; bDescriptorType
+aBcd2000mdi:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,' ',0,'M',0,'I',0,'D',0,'I',0,' ',0,'I'
+		db 0,'N',0,' ',0,' ',0
+
+strBcd2000MidiOut:	db  24h	; $		; DATA XREF: usbstrdesc+12o
+					; usbstrdesc+14o ...
+					; bLength
+		db    3			; bDescriptorType
+aBcd2000mdo:	db 'B',0,'C',0,'D',0,'2',0,'0',0,'0',0,'0',0,' ',0,'M',0,'I',0,'D',0,'I',0,' ',0,'O'
+		db 0,'U',0,'T',0,' ',0
 ; =============== S U B	R O U T	I N E =======================================
 
 
@@ -2295,12 +2530,37 @@ code_A37:				; CODE XREF: usbreqclrftr+8j
 usbstrdesc:				; CODE XREF: usbreqgetdescr:usbgetstringp
 		mov	A, wValRamL
 		dec	A
-		jz	usbstr1		; string1
+		jz	usbstr1		; Behringer
 		dec	A
-		jz	usbstr2		; string2
-		add	A, #2
-		jnz	usbstunk	; not main string descriptor
-		mov	R3, #0FFh
+		jz	usbstr2		; BCD2000HID+
+		dec	A
+		jz	usbstr3		; BCD2000Audio
+		dec	A
+		jz	usbstr4		; BCD2000 In
+		dec	A
+		jz	usbstr5j		; BCD2000 Out
+		dec	A
+		jz	usbstr6j		; BCD2000 In Idle
+		dec	A
+		jz	usbstr7j		; BCD2000 Out idle
+		dec	A
+		jz	usbstr8j		; BCD2000 MIDI
+		dec	A
+		jz	usbstr9j		; BCD2000 MIDI IN
+		dec	A
+		jz	usbstrAj		; BCD2000 MIDI OUT
+		add	A, #0Ah
+		jnz	usbstunkj	; not main string descriptor
+		jmp     usbother
+usbstr5j:	jmp	usbstr5
+usbstr6j:	jmp	usbstr6
+usbstr7j:	jmp	usbstr7
+usbstr8j:	jmp	usbstr8
+usbstr9j:	jmp	usbstr9
+usbstrAj:	jmp	usbstrA
+usbstunkj:	jmp	usbstunk
+
+usbother:	mov	R3, #0FFh
 		mov	R2, #high(string_descr)
 		mov	R1, #low(string_descr)	; string_descr
 		mov	R5, #(low((strBehringer - string_descr)))
@@ -2329,8 +2589,112 @@ usbstr2:				; CODE XREF: usbstrdesc+6j
 		mov	R3, #0FFh
 		mov	R2, #high(strBcd2000)
 		mov	R1, #low(strBcd2000) ;	strBcd2000
-		mov	R5, #(low((usbreqclose	- strBcd2000)))	; str len
-		mov	R4, #(high((usbreqclose - strBcd2000)))
+		mov	R5, #(low((strBcd2000Aud	- strBcd2000)))	; str len
+		mov	R4, #(high((strBcd2000Aud - strBcd2000)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+
+
+; ---------------------------------------------------------------------------
+
+usbstr3:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000Aud)
+		mov	R1, #low(strBcd2000Aud) ;	strBcd2000Aud
+		mov	R5, #(low((strBcd2000In	- strBcd2000Aud)))	; str len
+		mov	R4, #(high((strBcd2000In - strBcd2000Aud)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+; ---------------------------------------------------------------------------
+
+usbstr4:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000In)
+		mov	R1, #low(strBcd2000In) ;	strBcd2000In
+		mov	R5, #(low((strBcd2000Out  - strBcd2000In)))	; str len
+		mov	R4, #(high((strBcd2000Out - strBcd2000In)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+; ---------------------------------------------------------------------------
+
+usbstr5:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000Out)
+		mov	R1, #low(strBcd2000Out) ;	strBcd2000
+		mov	R5, #(low((strBcd2000InIdl	- strBcd2000Out)))	; str len
+		mov	R4, #(high((strBcd2000InIdl - strBcd2000Out)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+; ---------------------------------------------------------------------------
+
+usbstr6:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000InIdl)
+		mov	R1, #low(strBcd2000InIdl) ;	strBcd2000InIdl
+		mov	R5, #(low((strBcd2000OutIdl	- strBcd2000InIdl)))	; str len
+		mov	R4, #(high((strBcd2000OutIdl - strBcd2000InIdl)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+; ---------------------------------------------------------------------------
+
+usbstr7:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000OutIdl)
+		mov	R1, #low(strBcd2000OutIdl) ;	strBcd2000OutIdl
+		mov	R5, #(low((strBcd2000Midi	- strBcd2000OutIdl)))	; str len
+		mov	R4, #(high((strBcd2000Midi - strBcd2000OutIdl)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+; ---------------------------------------------------------------------------
+
+usbstr8:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000Midi)
+		mov	R1, #low(strBcd2000Midi) ;	strBcd2000Midi
+		mov	R5, #(low((strBcd2000MidiIn	- strBcd2000Midi)))	; str len
+		mov	R4, #(high((strBcd2000MidiIn - strBcd2000Midi)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+; ---------------------------------------------------------------------------
+usbstr9:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000MidiIn)
+		mov	R1, #low(strBcd2000MidiIn) ;	strBcd2000MidiIn
+		mov	R5, #(low((strBcd2000MidiOut	- strBcd2000MidiIn)))	; str len
+		mov	R4, #(high((strBcd2000MidiOut - strBcd2000MidiIn)))
+		lcall	usbPrepResp
+		clr	A
+		mov	R7, A
+		lcall	usbreqclose
+		ret
+; ---------------------------------------------------------------------------
+usbstrA:				; CODE XREF: usbstrdesc+6j
+		mov	R3, #0FFh
+		mov	R2, #high(strBcd2000MidiOut)
+		mov	R1, #low(strBcd2000MidiOut) ;	strBcd2000MidiOut
+		mov	R5, #(low((usbreqclose	- strBcd2000MidiOut)))	; str len
+		mov	R4, #(high((usbreqclose - strBcd2000MidiOut)))
 		lcall	usbPrepResp
 		clr	A
 		mov	R7, A
@@ -2661,6 +3025,29 @@ rdMidiOutBuf:				; CODE XREF: readMidiOutBuf+2j
 
 ; =============== S U B	R O U T	I N E =======================================
 
+; read a MIDI_OUT_BUF byte to R7
+; 0xFF if empty
+
+getMidiOutBuf:				; CODE XREF: serBtoUsbMidOut+75p
+		mov	A, SerInMidiPtr
+		cjne	A, SerMidiOutPtr, gtMidiOutBuf
+		mov	R7, #0FFh	; buffer empty - return	0xFF
+		ret
+; ---------------------------------------------------------------------------
+
+gtMidiOutBuf:				; CODE XREF: getMidiOutBuf+2j
+		mov	A, SerMidiOutPtr
+		anl	A, #7
+		add	A, #MIDI_OUT_BUF
+		mov	R0, A
+		mov	A, @R0
+		mov	R7, A
+		ret
+; End of function getMidiOutBuf
+
+
+; =============== S U B	R O U T	I N E =======================================
+
 
 code_BCE:				; CODE XREF: usbreqgetstat+3Dp
 					; usbreqclrftr+2Dp ...
@@ -2681,7 +3068,7 @@ code_BD8:				; CODE XREF: code_BCE+5j
 ; End of function code_BCE
 
 ; ---------------------------------------------------------------------------
-aBcd2000u13:	db '*BCD2000U13*'
+aBcd2000u13:	db '*BCD2000U23*'
 
 ; =============== S U B	R O U T	I N E =======================================
 
@@ -3129,27 +3516,6 @@ RAM_2A equ 2Ah				; DATA XREF: usbreqgetstat+Ew
 RAM_2B equ 2Bh				; DATA XREF: usbreqgetstat+12w
 					; usbreqgetstat+28w ...
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 RAM_42 equ 42h				; DATA XREF: usbsetup_ep1+4w
 					; usbreqgetconfr ...
 usbDatCnt equ 43h			; DATA XREF: usbTxResp_iep0+6r
@@ -3183,163 +3549,8 @@ MIDI_IN_BUF equ	58h			; DATA XREF: RI_TI_0+39o
 					; writeMidiInBuf+4o
 STACK equ 5Fh				; DATA XREF: RESET_0+6o
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 RAM_80 equ 80h
 RAM_81 equ 81h
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ; end of 'RAM'

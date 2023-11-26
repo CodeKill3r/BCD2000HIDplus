@@ -12,8 +12,8 @@ jobs:
       - name: Install DOSBox
         run: choco install dosbox
 
-      - run: dir C:\Program Files (x86)\
-      - run: dir C:\Program Files\
+      - run: dir "C:\Program Files (x86)\"
+      - run: dir "C:\Program Files\"
 
       - name: Run Compiler in DOSBox
         run: |

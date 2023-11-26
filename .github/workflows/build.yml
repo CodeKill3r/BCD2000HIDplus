@@ -12,13 +12,12 @@ jobs:
       - name: Install DOSBox
         run: choco install dosbox
 
-      - run: dir "C:\Program Files (x86)\"
-      - run: dir "C:\Program Files\"
+      - run: dir "C:\Program Files (x86)\DOSBox-0.74-3\"
 
       - name: Run Compiler in DOSBox
         run: |
           echo "mount C ." > dosbox.conf
           echo "C:" >> dosbox.conf
           echo "ASM51.EXE bcd2000hid+.8051.asm" >> dosbox.conf
-          C:\Program Files (x86)\DOSBox-0.74-3\dosbox -exit -conf dosbox.conf
+          "C:\Program Files (x86)\DOSBox-0.74-3\dosbox" -exit -conf dosbox.conf
         shell: cmd

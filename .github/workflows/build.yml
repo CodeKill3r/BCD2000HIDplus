@@ -15,6 +15,9 @@ jobs:
       - run: dir "C:\Program Files (x86)\DOSBox-0.74-3\"
 
       - name: Run Compiler in DOSBox
+        env:
+          SDL_VIDEODRIVER: dummy
+          SDL_AUDIODRIVER: dummy
         run: |
           echo "mount C ." > dosbox.conf
           echo "C:" >> dosbox.conf

@@ -1,0 +1,79 @@
+                       1    ;
+                       2    ;  8-bit by 8-bit signed multiply--byte signed multiply
+                       3    ;
+                       4    ;    This routine takes the signed byte in multiplicand and
+                       5    ;    multiplies it by the signed byte in multiplier and places
+                       6    ;    the signed 16-bit product in product_high and product_low.
+                       7    ;
+                       8    ;    This routine assumes 2s complement representation of signed
+                       9    ;    numbers.  The maximum numbers possible is then -128 and +127.
+                      10    ;    Multiplying the possible maximum numbers together easily fits
+                      11    ;    in a 16-bit product, so no overflow test is done on the answer.
+                      12    ;
+                      13    ;    Registers altered by routine: A, B, PSW.
+                      14    ;
+                      15    ;
+                      16    ;  Primary controls
+                      17    $MOD51
+                      18    $TITLE(BYTE SIGNED MULTIPLY)
+                      19    $PAGEWIDTH(132)
+                      20    $DEBUG
+                      21    $OBJECT
+                      22    $NOPAGING
+                      23    ;
+                      24    ;
+                      25    ;  Variable declarations
+                      26    ;
+  00F0                27    sign_flag       BIT     0F0H            ;sign of product
+  0030                28    multiplier      DATA    030H            ;8-bit multiplier
+  0031                29    multiplicand    DATA    031H            ;8-bit multiplicand
+  0032                30    product_high    DATA    032H            ;high byte of 16-bit answer
+  0033                31    product_low     DATA    033H            ;low byte of answer
+                      32    ;
+                      33    ;
+                      34    ;
+0100                  35            ORG     100H                    ;arbitrary start
+                      36    ;
+0100                  37    byte_signed_multiply:
+0100 C2F0             38                    CLR     sign_flag       ;reset sign
+0102 E530             39                    MOV     A,multiplier    ;put multiplier in accumulator
+0104 30E704           40                    JNB     ACC.7,positive  ;test sign bit of multiplier
+0107 F4               41                    CPL     A               ;negative--complement and
+0108 04               42                    INC     A               ;add 1 to convert to positive
+0109 D2F0             43                    SETB    sign_flag       ;and set sign flag
+                      44    ;
+010B 8531F0           45    positive:       MOV     B,multiplicand  ;put multiplicand in B register
+010E 30F707           46                    JNB     B.7,multiply    ;test sign bit of multiplicand
+0111 63F0FF           47                    XRL     B,#0FFh         ;negative--complement and
+0114 05F0             48                    INC     B               ;add 1 to convert to positive
+0116 B2F0             49                    CPL     sign_flag       ;complement sign flag
+                      50    ;
+0118 A4               51    multiply:       MUL     AB              ;do unsigned multiplication
+                      52    ;
+0119 30F00A           53    sign_test:      JNB     sign_flag,byte_signed_exit      ;if positive,done
+011C 63F0FF           54                    XRL     B,#0FFh         ;else have to complement both
+011F F4               55                    CPL     A               ;bytes of the product and inc
+0120 2401             56                    ADD     A,#1            ;need add here because inc doesn't set
+0122 5002             57                    JNC     byte_signed_exit        ;the carry flag
+0124 05F0             58                    INC     B               ;if add overflowed A, inc the high byte
+                      59    ;
+0126                  60    byte_signed_exit:
+0126 85F032           61                    MOV     product_high,B  ;save the answer
+0129 F533             62                    MOV     product_low,A   
+                      63    ;
+012B 22               64                    RET                     ;and return
+                      65            END
+
+VERSION 1.2e ASSEMBLY COMPLETE, 0 ERRORS FOUND
+ACC. . . . . . . . . . . . . . .  D ADDR  00E0H  PREDEFINED  
+B. . . . . . . . . . . . . . . .  D ADDR  00F0H  PREDEFINED  
+BYTE_SIGNED_EXIT . . . . . . . .  C ADDR  0126H  
+BYTE_SIGNED_MULTIPLY . . . . . .  C ADDR  0100H  NOT USED  
+MULTIPLICAND . . . . . . . . . .  D ADDR  0031H  
+MULTIPLIER . . . . . . . . . . .  D ADDR  0030H  
+MULTIPLY . . . . . . . . . . . .  C ADDR  0118H  
+POSITIVE . . . . . . . . . . . .  C ADDR  010BH  
+PRODUCT_HIGH . . . . . . . . . .  D ADDR  0032H  
+PRODUCT_LOW. . . . . . . . . . .  D ADDR  0033H  
+SIGN_FLAG. . . . . . . . . . . .  B ADDR  00F0H  
+SIGN_TEST. . . . . . . . . . . .  C ADDR  0119H  NOT USED  

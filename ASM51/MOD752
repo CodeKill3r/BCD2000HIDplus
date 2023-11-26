@@ -1,0 +1,82 @@
+;        REV.  1.1  Dec 23, 1989
+ACC      DATA   0E0H   ;Accumulator
+ADAT     DATA   084H   ;A/D Converter Data
+ADCON    DATA   0A0H   ;A/D Converter Control
+B        DATA   0F0H   ;Multiplication Register
+DPH      DATA   083H   ;Data Pointer - High Byte
+DPL      DATA   082H   ;Data Pointer - Low Byte
+I2CFG    DATA   0D8H   ;I2C Configuration
+I2CON    DATA   098H   ;I2C Control
+I2DAT    DATA   099H   ;I2C Data
+I2STA    DATA   0F8H   ;I2C Internal Status
+IE       DATA   0A8H   ;Interrupt Enable
+P0       DATA   080H   ;Port 0
+P1       DATA   090H   ;Port 1
+P3       DATA   0B0H   ;Port 3
+PCON     DATA   087H   ;Power Control
+PSW      DATA   0D0H   ;Program Status Word
+PWCM     DATA   08EH   ;PWM Compare
+PWENA    DATA   0FEH   ;PWM Enable
+PWMP     DATA   08FH   ;PWM Prescalar
+RTH      DATA   08DH   ;Reload Timer - High Byte
+RTL      DATA   08BH   ;Reload Timer - Low Byte
+SP       DATA   081H   ;Stack Pointer
+TCON     DATA   088H   ;Timer Control
+TH       DATA   08CH   ;Timer - High Byte
+TL       DATA   08AH   ;Timer - Low Byte
+SCL      BIT    080H   ;P0.0 - I2C Serial Clock
+SDA      BIT    081H   ;P0.0 - I2C Serial Data
+IT1      BIT    088H   ;TCON.0 - External Interrupt 1 Type
+IE1      BIT    089H   ;TCON.1 - External Interrupt 1 Edge Flag
+IT0      BIT    08AH   ;TCON.2 - External Interrupt 0 Type
+IE0      BIT    08BH   ;TCON.3 - External Interrupt 0 Edge Flag
+TR       BIT    08CH   ;TCON.4 - Timer On/Off Control
+TF       BIT    08DH   ;TCON.5 - Timer 0 Overflow Flag
+CT       BIT    08EH   ;TCON.6 - Counter or Timer
+GATE     BIT    08FH   ;TCON.7 - Timer enabled on (INT0 AND TR) or TR
+INT0     BIT    095H   ;P1.5 - External Interrutp 0 Input
+INT1     BIT    096H   ;P1.6 - External Interrupt 1 Input
+T0       BIT    097H   ;P1.7 - Timer 0 Count Input
+MASTER   BIT    099H   ;I2CON.1 - READ - Determines master of I2C bus
+STP      BIT    09AH   ;I2CON.2 - READ - I2C stop condition flag
+STR      BIT    09BH   ;I2CON.3 - READ - I2C start condition flag
+ARL      BIT    09CH   ;I2CON.4 - READ - Arbitration loss flag
+DRDY     BIT    09DH   ;I2CON.5 - READ - Data ready flag
+ATN      BIT    09EH   ;I2CON.6 - READ - (DRDY or ARL or STR or STP)
+RDAT     BIT    09FH   ;I2CON.7 - READ - Receive data flag
+XSTP     BIT    098H   ;I2CON.0 - WRITE - Transmit stop condition
+XSTR     BIT    099H   ;I2CON.1 - WRITE - Transmit repeated start condition
+CSTP     BIT    09AH   ;I2CON.2 - WRITE - Clear stop condition flag
+CSTR     BIT    09BH   ;I2CON.3 - WRITE - Clear start condition flag
+CARL     BIT    09CH   ;I2CON.4 - WRITE - Clear arbitration loss flag
+CDR      BIT    09DH   ;I2CON.5 - WRITE - Clear data ready flag
+IDLE     BIT    09EH   ;I2CON.6 - WRITE - Slave idle flag
+CXA      BIT    09FH   ;I2CON.7 - WRITE - Clear transmit active flag
+EX0      BIT    0A8H   ;IE.0 - External Interrupt 0 Enable
+ET0      BIT    0A9H   ;IE.1 - Timer 0 Interrupt Enable
+EX1      BIT    0AAH   ;IE.2 - External Interrupt 1 Enable
+EPWM     BIT    0ABH   ;IE.3 - PWM Interrupt Enable
+ES       BIT    0ACH   ;IE.4 - Serial Port Interrupt Enable
+ETI      BIT    0ADH   ;IE.5 - Timer 1 Interrupt Enable
+EAD      BIT    0AEH   ;IE.6 - ADC Interrupt Enable
+EA       BIT    0AFH   ;IE.7 - Global Interrupt Enable
+P        BIT    0D0H   ;PSW.0 - Accumulator Parity Flag
+OV       BIT    0D2H   ;PSW.2 - Overflow Flag
+RS0      BIT    0D3H   ;PSW.3 - Register Bank Select 0
+RS1      BIT    0D4H   ;PSW.4 - Register Bank Select 1
+F0       BIT    0D5H   ;PSW.5 - Flag 0
+AC       BIT    0D6H   ;PSW.6 - Auxiliary Carry Flag
+CY       BIT    0D7H   ;PSW.7 - Carry Flag
+CT0      BIT    0D8H   ;I2CFG.0 - Timing bit
+CT1      BIT    0D9H   ;I2CFG.1 - Timing bit
+TIRUN    BIT    0DCH   ;I2CFG.4 - Enable/disable timer 1
+CLRTI    BIT    0DDH   ;I2CFG.5 - Clear timer 1 interrupt flag
+MASTRQ   BIT    0DEH   ;I2CFG.6 - Request mastership of I2C
+SLAVEN   BIT    0DFH   ;I2CFG.7 - Enable I2C slave functionality
+RSTP     BIT    0F8H   ;I2STA.0 - READ - Transmit Stop Condition
+RSTR     BIT    0F9H   ;I2STA.1 - READ - Transmit Repeated Start Condition
+MAKSTP   BIT    0FAH   ;I2STA.2 - READ - Stop Condition
+MAKSTR   BIT    0FBH   ;I2STA.3 - READ - Start Condition
+XACTV    BIT    0FCH   ;I2STA.4 - READ - Transmitter Active
+XDATA    BIT    0FDH   ;I2STA.5 - READ - Content of Transmitter Buffer
+RIDLE    BIT    0FEH   ;I2STA.6 - READ - Slave Idle Flag

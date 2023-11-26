@@ -1,0 +1,118 @@
+;       REV.  1.0    MAY 23, 1988
+P0      DATA  080H  ;Port 0
+SP      DATA  081H  ;Stack Pointer
+DPL     DATA  082H  ;Data Pointer - Low Byte
+DPH     DATA  083H  ;Data Pointer - High Byte
+PCON    DATA  087H  ;Power Control
+TCON    DATA  088H  ;Timer Control
+TMOD    DATA  089H  ;Timer Mode
+TL0     DATA  08AH  ;Timer 0 - Low Byte
+TL1     DATA  08BH  ;Timer 1 - Low Byte
+TH0     DATA  08CH  ;Timer 0 - High Byte
+TH1     DATA  08DH  ;Timer 1 - High Byte
+P1      DATA  090H  ;Port 1
+SCON    DATA  098H  ;Serial Port Control
+SBUF    DATA  099H  ;Serial Port Buffer
+P2      DATA  0A0H  ;Port 2
+IE      DATA  0A8H  ;Interrupt Enable
+SADDR   DATA  0A9H  ;Serial Address Recognition Byte
+P3      DATA  0B0H  ;Port 3
+IP      DATA  0B8H  ;Interrupt Priority
+SADEN   DATA  0B9H  ;Serial Address Recognition Mask Byte
+T2CON   DATA  0C8H  ;Timer/Counter 2 Control Register
+T2MOD   DATA  0C9H  ;Timer 2 Mode
+RCAP2L  DATA  0CAH  ;Timer 2 Capture Register - Low Byte
+RCAP2H  DATA  0CBH  ;Timer 2 Capture Register - High Byte
+TL2     DATA  0CCH  ;Timer 2 - Low Byte
+TH2     DATA  0CDH  ;Timer 2 - High Byte
+PSW     DATA  0D0H  ;Program Status Word
+CCON    DATA  0D8H  ;Counter Control Register
+CMOD    DATA  0D9H  ;Counter Mode Register
+CCAPM0  DATA  0DAH  ;Compare/Capture Mode For PCA 0
+CCAPM1  DATA  0DBH  ;Compare/Capture Mode For PCA 1
+CCAPM2  DATA  0DCH  ;Compare/Capture Mode For PCA 2
+CCAPM3  DATA  0DDH  ;Compare/Capture Mode For PCA 3
+CCAPM4  DATA  0DEH  ;Compare/Capture Mode For PCA 4
+ACC     DATA  0E0H  ;Accumulator
+CL      DATA  0E9H  ;Counter - Low Byte
+CCAP0L  DATA  0EAH  ;Compare/Capture Register 0 - Low Byte
+CCAP1L  DATA  0EBH  ;Compare/Capture Register 1 - Low Byte
+CCAP2L  DATA  0ECH  ;Compare/Capture Register 2 - Low Byte
+CCAP3L  DATA  0EDH  ;Compare/Capture Register 3 - Low Byte
+CCAP4L  DATA  0EEH  ;Compare/Capture Register 4 - Low Byte
+B       DATA  0F0H  ;Multiplication Register
+CH      DATA  0F9H  ;Counter - High Byte
+CCAP0H  DATA  0FAH  ;Compare/Capture Register 0 - High Byte
+CCAP1H  DATA  0FBH  ;Compare/Capture Register 1 - High Byte
+CCAP2H  DATA  0FCH  ;Compare/Capture Register 2 - High Byte
+CCAP3H  DATA  0FDH  ;Compare/Capture Register 3 - High Byte
+CCAP4H  DATA  0FEH  ;Compare/Capture Register 4 - High Byte
+IT0     BIT   088H  ;TCON.0 - External Interrupt 0 Type
+IE0     BIT   089H  ;TCON.1 - External Interrupt 0 Edge Flag
+IT1     BIT   08AH  ;TCON.2 - External Interrupt 1 Type
+IE1     BIT   08BH  ;TCON.3 - External Interrupt 1 Edge Flag
+TR0     BIT   08CH  ;TCON.4 - Timer 0 On/Off Control
+TF0     BIT   08DH  ;TCON.5 - Timer 0 Overflow Flag
+TR1     BIT   08EH  ;TCON.6 - Timer 1 On/Off Control
+TF1     BIT   08FH  ;TCON.7 - Timer 1 Overflow Flag
+T2      BIT   090H  ;P1.0 - External Count Input to Timer 2
+T2EX    BIT   091H  ;P1.1 - Timer 2 Capture/Reload Trigger
+ECI     BIT   092H  ;P1.2 - External Count Input To The PCA
+CEX0    BIT   093H  ;P1.3 - External I/O for Compare/Capture PCA 0
+CEX1    BIT   094H  ;P1.4 - External I/O for Compare/Capture PCA 1
+CEX2    BIT   095H  ;P1.5 - External I/O for Compare/Capture PCA 2
+CEX3    BIT   096H  ;P1.6 - External I/O for Compare/Capture PCA 3
+CEX4    BIT   097H  ;P1.7 - External I/O for Compare/Capture PCA 4
+RI      BIT   098H  ;SCON.0 - Receive Interrupt Flag
+TI      BIT   099H  ;SCON.1 - Transmit Interrupt Flag
+RB8     BIT   09AH  ;SCON.2 - Receive Bit 8
+TB8     BIT   09BH  ;SCON.3 - Transmit Bit 8
+REN     BIT   09CH  ;SCON.4 - Receive Enable
+SM2     BIT   09DH  ;SCON.5 - Serial Mode Control Bit 2
+SM1     BIT   09EH  ;SCON.6 - Serial Mode Control Bit 1
+SM0     BIT   09FH  ;SCON.7 - Serial Mode Control Bit 0
+EX0     BIT   0A8H  ;IE.0 - External Interrupt 0 Enable
+ET0     BIT   0A9H  ;IE.1 - Timer 0 Interrupt Enable
+EX1     BIT   0AAH  ;IE.2 - External Interrupt 1 Enable
+ET1     BIT   0ABH  ;IE.3 - Timer 1 Interrupt Enable
+ES      BIT   0ACH  ;IE.4 - Serial Port Interrupt Enable
+ET2     BIT   0ADH  ;IE.5 - Timer 2 Overflow Interrupt 
+EC      BIT   0AEH  ;IE.6 - Enable PCA Interrupt
+EA      BIT   0AFH  ;IE.7 - Global Interrupt Enable
+RXD     BIT   0B0H  ;P3.0 - Serial Port Receive Input
+TXD     BIT   0B1H  ;P3.1 - Serial Port Transmit Output
+INT0    BIT   0B2H  ;P3.2 - External Interrupt 0 Input
+INT1    BIT   0B3H  ;P3.3 - External Interrupt 1 Input
+T0      BIT   0B4H  ;P3.4 - Timer 0 Count Input
+T1      BIT   0B5H  ;P3.5 - Timer 1 Count Input
+WR      BIT   0B6H  ;P3.6 - Write Control for External Memory
+RD      BIT   0B7H  ;P3.7 - Read Control for External Memory
+PX0     BIT   0B8H  ;IP.0 - External Interrupt 0 Priority
+PT0     BIT   0B9H  ;IP.1 - Timer 0 Priority
+PX1     BIT   0BAH  ;IP.2 - External Interrupt 1 Priority
+PT1     BIT   0BBH  ;IP.3 - Timer 1 Priority
+PS      BIT   0BCH  ;IP.4 - Serial Port Priority
+PT2     BIT   0BDH  ;IP.5 - PCA
+PPC     BIT   0BEH  ;IP.6 - Timer 2
+CAP2    BIT   0C8H  ;T2CON.0 - Capture/Reload Flag
+CNT2    BIT   0C9H  ;T2CON.1 - Timer/Counter Select
+TR2     BIT   0CAH  ;T2CON.2 - Timer 2 Start/Stop Control
+EXEN2   BIT   0CBH  ;T2CON.3 - Timer 2 External Enable Flag
+TCLK    BIT   0CCH  ;T2CON.4 - Transmit Clock Flag
+RCLK    BIT   0CDH  ;T2CON.5 - Receive Clock Flag
+EXF2    BIT   0CEH  ;T2CON.6 - Timer 2 External Flag
+TF2     BIT   0CFH  ;T2CON.7 - Timer 2 Overflow Flag
+P       BIT   0D0H  ;PSW.0 - Accumulator Parity Flag
+OV      BIT   0D2H  ;PSW.2 - Overflow Flag
+RS0     BIT   0D3H  ;PSW.3 - Register Bank Select 0
+RS1     BIT   0D4H  ;PSW.4 - Register Bank Select 1
+F0      BIT   0D5H  ;PSW.5 - Flag 0
+AC      BIT   0D6H  ;PSW.6 - Auxiliary Carry Flag
+CY      BIT   0D7H  ;PSW.7 - Carry Flag
+CCF0    BIT   0D8H  ;CCON.0 - PCA 0 Interrupt Flag
+CCF1    BIT   0D9H  ;CCON.1 - PCA 1 Interrupt Flag
+CCF2    BIT   0DAH  ;CCON.2 - PCA 2 Interrupt Flag
+CCF3    BIT   0DBH  ;CCON.3 - PCA 3 Interrupt Flag
+CCF4    BIT   0DCH  ;CCON.4 - PCA 4 Interrupt Flag
+CR      BIT   0DEH  ;CCON.6 - PCA Counter Overflow Flag
+CF      BIT   0DFH  ;CCON.7 - Counter Run Control Bit

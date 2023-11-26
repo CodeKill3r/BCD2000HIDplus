@@ -1,0 +1,552 @@
+
+      +-----------+------------+-------------+-------------+-------------+-------------+-------------------+
+      | Component | Technology | Amnt of ROM | Type of ROM | Amnt of RAM | No. of SFRs |  Serial I/O Type  |
+      |-----------|------------|-------------|-------------|-------------|-------------|-------------------|
+      |    8031   |    HMOS    |      0      |     --      |  128 bytes  |     21      | Start/Stop Async  |
+      |    8051   |    HMOS    |   4Kbytes   |   Masked    |  128 bytes  |     21      | Start/Stop Async  |
+      |    8751   |    HMOS    |   4Kbytes   |   EPROM     |  128 bytes  |     21      | Start/Stop Async  |
+      |    8053   |    HMOS    |   8Kbytes   |   Masked    |  128 bytes  |     21      | Start/Stop Async  |
+      |    9761   |    HMOS    |   8Kbytes   |   EPROM     |  128 bytes  |     21      | Start/Stop Async  |
+      |    8751   |    HMOS    |   8Kbytes   |   EPROM     |  128 bytes  |     21      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |   80C31   |    CMOS    |      0      |     --      |  128 bytes  |     21      | Start/Stop Async  |
+      |   80C51   |    CMOS    |   4Kbytes   |   Masked    |  128 bytes  |     21      | Start/Stop Async  |
+      |   87C51   |    CMOS    |   4Kbytes   |   EPROM     |  128 bytes  |     21      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |    8032   |    HMOS    |      0      |     --      |  256 bytes  |     26      | Start/Stop Async  |
+      |    8052   |    HMOS    |   8Kbytes   |   Masked    |  256 bytes  |     26      | Start/Stop Async  |
+      |    8752   |    HMOS    |   8Kbytes   |   EPROM     |  256 bytes  |     26      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |   80C32   |    CMOS    |      0      |     --      |  256 bytes  |     26      | Start/Stop Async  |
+      |   80C52   |    CMOS    |   8Kbytes   |   Masked    |  256 bytes  |     26      | Start/Stop Async  |
+      |   87C52   |    CMOS    |   8Kbytes   |   EPROM     |  256 bytes  |     26      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |    8044   |    HMOS    |   4Kbytes   |   Masked    |  192 bytes  |     34      |     HDLC/SDLC     |
+      |    8344   |    HMOS    |      0      |     --      |  192 bytes  |     34      |     HDLC/SDLC     |
+      |    8744   |    HMOS    |   4Kbytes   |   EPROM     |  192 bytes  |     34      |     HDLC/SDLC     |
+      |           |            |             |             |             |             |                   |
+      |   80535   |    HMOS    |      0      |     --      |  256 bytes  |     41      | Start/Stop Async  |
+      |   80515   |    HMOS    |   8Kbytes   |   Masked    |  256 bytes  |     41      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  80C535   |   CHMOS    |      0      |     --      |  256 bytes  |     41      | Start/Stop Async  |
+      |  80C515   |   CHMOS    |   8Kbytes   |   Masked    |  256 bytes  |     41      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |   80532   |    HMOS    |      0      |     --      |  128 bytes  |     28      | Start/Stop Async  |
+      |   80512   |    HMOS    |   4Kbytes   |   Masked    |  128 bytes  |     28      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  80C152   |   CHMOS    |      0      |     --      |  256 bytes  |     56      |      CSMA/CD      |
+      |  83C152   |   CHMOS    |   8Kbytes   |   Masked    |  256 bytes  |     56      |      CSMA/CD      |
+      |           |            |             |             |             |             |                   |
+      |  80C154   |    CMOS    |      0      |     --      |  256 bytes  |     27      | Start/Stop Async  |
+      |  83C154   |    CMOS    |  16Kbytes   |   Masked    |  256 bytes  |     27      | Start/Stop Async  |
+      |  85C154   |    CMOS    |  16Kbytes   |   EPROM     |  256 bytes  |     27      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      +-----------+------------+-------------+-------------+-------------+-------------+-------------------+
+
+      +-----------+------------+-------------+-------------+-------------+-------------+-------------------+
+      | Component | Technology | Amnt of ROM | Type of ROM | Amnt of RAM | No. of SFRs |  Serial I/O Type  |
+      |-----------|------------|-------------|-------------|-------------|-------------|-------------------|
+      |  80C51FA  |   CHMOS    |      0      |     --      |  256 bytes  |     47      | Start/Stop Async  |
+      |  83C51FA  |   CHMOS    |   8Kbytes   |   Masked    |  256 bytes  |     47      | Start/Stop Async  |
+      |  87C51FA  |   CHMOS    |   8Kbytes   |   EPROM     |  256 bytes  |     47      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  83C51FB  |   CHMOS    |  16Kbytes   |   Masked    |  256 bytes  |     47      | Start/Stop Async  |
+      |  87C51FB  |   CHMOS    |  16Kbytes   |   EPROM     |  256 bytes  |     47      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  83C51FB  |   CHMOS    |  32Kbytes   |   Masked    |  256 bytes  |     47      | Start/Stop Async  |
+      |  87C51FB  |   CHMOS    |  32Kbytes   |   EPROM     |  256 bytes  |     47      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  80C537   |   CHMOS    |      0      |     --      |  256 bytes  |     41      | Start/Stop Async  |
+      |  80C517   |   CHMOS    |   8Kbytes   |   Masked    |  256 bytes  |     82      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  80C451   |   CMOS     |      0      |     --      |  128 bytes  |     24      |    Parallel I/F   |
+      |  83C451   |   CMOS     |   4Kbytes   |   Masked    |  128 bytes  |     24      |    Parallel I/F   |
+      |  87C451   |   CMOS     |   4Kbytes   |   EPROM     |  128 bytes  |     24      |    Parallel I/F   |
+      |           |            |             |             |             |             |                   |
+      |  80C452   |   CHMOS    |      0      |     --      |  256 bytes  |     55      |      U.P.I.       |
+      |  83C452   |   CHMOS    |   8Kbytes   |     --      |  256 bytes  |     55      |      U.P.I.       |
+      |  87C452   |   CHMOS    |   8Kbytes   |     --      |  256 bytes  |     55      |      U.P.I.       |
+      |           |            |             |             |             |             |                   |
+      |  80C552   |   CMOS     |      0      |     --      |  256 bytes  |     54      | Start/Stop Async  |
+      |  83C552   |   CMOS     |   8Kbytes   |   Masked    |  256 bytes  |     54      | Start/Stop Async  |
+      |  87C552   |   CMOS     |   8Kbytes   |   EPROM     |  256  bytes |     54      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  80C652   |   CMOS     |      0      |     --      |  256 bytes  |     24      | Start/Stop Async  |
+      |  83C652   |   CMOS     |   8Kbytes   |   Masked    |  256 bytes  |     24      | Start/Stop Async  |
+      |  87C652   |   CMOS     |   8Kbytes   |   EPROM     |  256 bytes  |     24      | Start/Stop Async  |
+      |  83C654   |   CMOS     |  16Kbytes   |   Masked    |  256 bytes  |     24      | Start/Stop Async  |
+      |  87C654   |   CMOS     |  16Kbytes   |   EPROM     |  256 bytes  |     24      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  83C752   |   CMOS     |   2Kbytes   |   Masked    |   64 bytes  |     25      |      I2C          |
+      |  87C752   |   CMOS     |   2Kbytes   |   EPROM     |   64 bytes  |     25      |      I2C          |
+      |           |            |             |             |             |             |                   |
+      |  83C751   |   CMOS     |   2Kbytes   |   Masked    |   64 bytes  |     20      |      I2C          |
+      |  87C751   |   CMOS     |   2Kbytes   |   EPROM     |   64 bytes  |     20      |      I2C          |
+      |           |            |             |             |             |             |                   |
+      |  80C521   |   CMOS     |      0      |     --      |  256 bytes  |     26      | Start/Stop Async  |
+      |  80C321   |   CMOS     |   8Kbytes   |   Masked    |  256 bytes  |     26      | Start/Stop Async  |
+      |  87C521   |   CMOS     |   8Kbytes   |   EPROM     |  256 bytes  |     26      | Start/Stop Async  |
+      |  80C541   |   CMOS     |  16Kbytes   |   Masked    |  256 bytes  |     26      | Start/Stop Async  |
+      |  87C541   |   CMOS     |  16Kbytes   |   EPROM     |  256 bytes  |     26      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      |  80C851   |    CMOS    |      0      |     --      |  128 bytes  |     21      | Start/Stop Async  |
+      |  83C851   |    CMOS    |   4Kbytes   |   Masked    |  128 bytes  |     21      | Start/Stop Async  |
+      |           |            |             |             |             |             |                   |
+      +-----------+------------+-------------+-------------+-------------+-------------+-------------------+
+
+         $DATE(date)       Places date in page header               $EJECT            Places a form feed in listing
+         $INCLUDE(file)    Inserts file in source program           $LIST             Allows listing to be output
+         $NOLIST           Stops outputting the listing             $MOD51            Uses 8051 predefined symbols
+         $MOD52            Uses 8052 predefined symbols             $MOD44            Uses 8044 predefined symbols
+         $NOMOD            No predefined symbols used               $OBJECT(file)     Places object output in file
+         $NOOBJECT         No object file is generated              $PAGING           Break output listing into pages
+         $NOPAGING         Print listing w/o page breaks            $PAGELENGTH(n)    No. of lines on a listing page
+         $PAGEWIDTH(n)     No. of columns on a listing page         $PRINT(file)      Places listing output in file
+         $NOPRINT          Listing will not be output               $SYMBOLS          Append symbol table to listing
+         $NOSYMBOLS        Symbol table will not be output          $TITLE(string)    Places string in page header 
+
+         EQU       Define symbol                                    DATA      Define internal memory symbol
+         IDATA     Define indirectly addressed internal             XDATA     Define external memory symbol
+                       memory symbol                                BIT       Define internal bit memory symbol
+         CODE      Define program memory symbol                     DS        Reserve bytes of data memory
+         DBIT      Reserve bits of bit memory                       DB        Store byte values in program memory
+         DW        Store word values in program memory              ORG       Set segment location counter
+         END       End of assembly language source file             CSEG      Select program memory space
+         DSEG      Select internal memory data space                XSEG      Select external memory data space
+         ISEG      Select indirectly addressed internal             BSEG      Select bit addressable memory space
+                       memory space                                 USING     Select register bank  
+         IF        Begin conditional assembly block                 ELSE      Alternative conditional assembly block
+         ENDIF     End conditional assembly block
+
+         ACALL     Absolute call            ADD       Add                       ADDC      Add with carry 
+         AJMP      Absolute jump            ANL       Logical and               CJNE      Compare & jump if not equal
+         CLR       Clear                    CPL       Complement                DA        Decimal adjust
+         DEC       Decrement                DIV       Divide                    DJNZ      Decrement & jump if not zero
+         INC       Increment                JB        Jump if bit set           JBC       Jump & clear bit if bit set   
+         JC        Jump if carry set        JMP       Jump                      JNB       Jump if bit not set
+         JNC       Jump if carry not set    JNZ       Jump if accum. not zero   JZ        Jump if accumulator zero
+         LCALL     Long call                LJMP      Long jump                 MOV       Move
+         MOVC      Move code                MOVX      Move external             MUL       Multiply
+         NOP       No operation             ORL       Inclusive or              POP       Pop stack
+         PUSH      Push stack               RET       Return                    RETI      Return from interrupt
+         RL        Rotate left              RLC       Rotate left thru carry    RR        Rotate right
+         RRC       Rotate right thru carry  SETB      Set bit                   SJMP      Short jump
+         SUBB      Subtract with borrow     SWAP      Swap nibbles              XCH       Exchange bytes
+         XCHD      Exchange digits          XRL       Exclusive or              CALL      Generic call
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |    FORM                |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  ACALL                 |                         |             |             |                        |       |   |   |       |
+      |  2K in Page (11 bits)  | PC + 2 -> STACK         | Prog Direct |             | ACALL  Paddr           |  see  | 2 | 2 | - - - |
+      |  Absolute Call         | SP + 2 -> SP            |             |             |                        | note  |   |   |       |
+      |                        | Paddr<10:0> -> PC<10:0> |             |             |                        |   1   |   |   |       |
+      |                        | PC<15:11> -> PC<15:11>  |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|           
+      |  ADD                   |                         |             |             |                        |       |   |   |       |
+      |  Add Operand to        | A + SOper -> A          | Accumulator | Immediate   | ADD   A,#data          |  24   | 2 | 1 | * * * |
+      |  Accumulator           |                         |      "      | Direct      | ADD   A,Daddr          |  25   | 2 | 1 |       |
+      |                        |                         |      "      | Indirect    | ADD   A,@Ri            | 26,27 | 1 | 1 |       |
+      |                        |                         |      "      | Register    | ADD   A,Rn             | 28-2F | 1 | 1 |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  ADDC                  |                         |             |             |                        |       |   |   |       |
+      |  Add Operand with      | A + SOper + C -> A      | Accumulator | Immediate   | ADDC  A,#data          |  34   | 2 | 1 | * * * |
+      |  Carry to Accumulator  |                         |      "      | Direct      | ADDC  A,Daddr          |  35   | 2 | 1 |       |
+      |                        |                         |      "      | Indirect    | ADDC  A,@Ri            | 36,37 | 1 | 1 |       |
+      |                        |                         |      "      | Register    | ADDC  A,Rn             | 38-3F | 1 | 1 |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  AJMP                  |                         |             |             |                        |  see  |   |   |       |
+      |  2K in Page (11 bits)  | Paddr<10:0> -> PC<10:0> | Prog Direct |             | AJMP  Paddr            | note  | 2 | 2 | - - - |
+      |  Absolute Jump         | PC<15:11> -> PC<15:11>  |             |             |                        |   2   |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  ANL                   |                         |             |             |                        |       |   |   |       |
+      |  Logical AND of Source | SOper ^ DOper -> DOper  | Direct      | Accumulator | ANL   Daddr,A          |  52   | 2 | 1 | - - - |
+      |  Operand with          |                         |   "         | Immediate   | ANL   Daddr,#data      |  53   | 3 | 2 |       |
+      |  Destination Operand   |                         | Accumulator | Immediate   | ANL   A,#data          |  54   | 2 | 1 |       |
+      |                        |                         |      "      | Direct      | ANL   A,Daddr          |  55   | 2 | 1 |       |
+      |                        |                         |      "      | Indirect    | ANL   A,@Ri            | 56,57 | 1 | 1 |       |
+      |                        |                         |      "      | Register    | ANL   A,Rn             | 58-5F | 1 | 1 |       |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Logical AND of Source | SOper ^ CF -> CF        | Carry Flag  | Bit Direct  | ANL   C,Baddr          |  82   | 2 | 2 | * - - |
+      |  Operand with          |                         |             |             |                        |       |   |   |       |
+      |  Carry Flag (Continued)|                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  ANL (Continued)       |                         |             |             |                        |       |   |   |       |
+      |  Logical AND of Source | ~SOper ^ CF -> CF       | Carry Flag  | Bit Direct  | ANL   C,/Baddr         |  B0   | 2 | 2 | * - - |
+      |  Operand Complemented  |                         |             |             |                        |       |   |   |       |
+      |  with Carry Flag       |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  CJNE                  |                         |             |             |                        |       |   |   |       |
+      |  Compare Operands and  | Jump Relative to PC if  | Accumulator | Immediate   | CJNE  A,#data,Roff     |  B4   | 3 | 2 | * - - |
+      |  Jump Relative if not  | DOper <> SOper          |      "      | Direct      | CJNE  A,Daddr,Roff     |  B5   | 3 | 2 |  see  |
+      |  Equal                 |                         | Indirect    | Immediate   | CJNE  @Ri,#data,Roff   | B6,B7 | 3 | 2 | note  |
+      |                        |                         | Register    |     "       | CJNE  Rn,#data,Roff    | B8-BF | 3 | 2 |   3   |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  CLR                   |                         |             |             |                        |       |   |   |       |
+      |  Clear Accumulator     | 0 -> A                  | Accumulator |             | CLR   A                |  E4   | 1 | 1 | - - - |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Clear Carry Flag      | 0 -> CF                 | Carry Flag  |             | CLR   C                |  C3   | 1 | 1 | 0 - - |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Clear Bit Operand     | 0 -> DOper              | Bit Direct  |             | CLR   Baddr            |  C2   | 2 | 1 | - - - |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  CPL                   |                         |             |             |                        |       |   |   |       |
+      |  Complement Accumulator| ~A -> A                 | Accumulator |             | CPL   A                |  F4   | 1 | 1 | - - - |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Complement Carry Flag | ~CF -> CF               | Carry Flag  |             | CPL   C                |  B3   | 1 | 1 | * - - |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Complement Bit Operand| ~DOper -> DOper         | Bit Direct  |             | CPL   Baddr            |  B2   | 2 | 1 | - - - |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  DA                    |                         |             |             |                        |       |   |   |       |
+      |  Decimal Adjust        | If (A<3:0> > 9) v AC    | Accumulator |             | DA    A                |  D4   | 1 | 1 | * - - |
+      |  Accumulator for       |  then A<3:0>+6 -> A<3:0>|             |             |                        |       |   |   |  see  |
+      |  Addition              | If (A<7:4> > 9) v CF    |             |             |                        |       |   |   | note  |
+      |                        |  then A<7:4>+6 -> A<7:4>|             |             |                        |       |   |   |   4   |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  DEC                   |                         |             |             |                        |       |   |   |       |
+      |  Decrement Operand     | DOper - 1 -> DOper      | Accumulator |             | DEC   A                |  14   | 1 | 1 | - - - |
+      |                        |                         | Direct      |             | DEC   Daddr            |  15   | 2 | 1 |       |
+      |                        |                         | Indirect    |             | DEC   @Ri              | 16,17 | 1 | 1 |       |
+      |                        |                         | Register    |             | DEC   Rn               | 18-1F | 1 | 1 |       | 
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  DIV                   |                         |             |             |                        |       |   |   |       |
+      |  Divide Accumulator by | A / B -> A              |  AB         |             | DIV   AB               |  84   | 1 | 4 | 0 - * |
+      |  B Register            | Remainder -> B          |             |             |                        |       |   |   |  see  |
+      |                        |                         |             |             |                        |       |   |   | note 5|
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  DJNZ                  |                         |             |             |                        |       |   |   |       |
+      |  Decrement Operand and | DOper - 1 -> DOper      | Direct      |             | DJNZ  Daddr,Roff       |  D5   | 3 | 2 | - - - |
+      |  Jump Relative if Not  | If DOper <> 0 then Jump | Register    |             | DJNZ  Rn,Roff          | D8-DF | 2 | 2 |       |
+      |  Zero                  |  Relative to PC         |             |             |                        |       |   |   |       | 
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  INC                   |                         |             |             |                        |       |   |   |       |
+      |  Increment Operand     | DOper + 1 -> DOper      | Accumulator |             | INC   A                |  04   | 1 | 1 | - - - |
+      |                        |                         | Direct      |             | INC   Daddr            |  05   | 2 | 1 |       |
+      |                        |                         | Indirect    |             | INC   @Ri              | 06,07 | 1 | 1 |       |
+      |                        |                         | Register    |             | INC   Rn               | 08-0F | 1 | 1 |       |
+      |                        |                         | Data Pointer|             | INC   DPTR             |  A3   | 1 | 2 |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JB                    |                         |             |             |                        |       |   |   |       |
+      |  Jump Relative if Bit  | If DOper = 1 then Jump  | Bit Direct  |             | JB    Baddr,Roff       |  20   | 3 | 2 | - - - |
+      |  Operand is Set        |  Relative to PC         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JBC                   |                         |             |             |                        |       |   |   |       |
+      |  Jump Relative if Bit  | If DOper = 1 then       | Bit Direct  |             | JBC   Baddr,Roff       |  10   | 3 | 2 | * * * |
+      |  Operand is Set and    |  0 -> DOper and Jump    |             |             |                        |       |   |   |  see  |
+      |  Clear Bit Operand     |  Relative to PC         |             |             |                        |       |   |   | note 6|
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JC                    |                         |             |             |                        |       |   |   |       |
+      |  Jump Relative if      | If CF = 1 then Jump     | Carry Flag  |             | JC    Roff             |  40   | 2 | 2 | - - - |
+      |  Carry Flag is Set     |  Relative to PC         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JMP                   |                         |             |             |                        |       |   |   |       |
+      |  Jump Indirect         | DPTR<15:0> + A<7:0>     | Prog Indir  |             | JMP   @A+DPTR          |  73   | 1 | 2 | - - - |
+      |                        |   -> PC<15:0>           |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JNB                   |                         |             |             |                        |       |   |   |       |
+      |  Jump Relative if Bit  | If DOper = 0 then Jump  | Bit Direct  |             | JNB   Baddr,Roff       |  30   | 3 | 2 | - - - |
+      |  Operand is Clear      |  Relative to PC         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JNC                   |                         |             |             |                        |       |   |   |       |
+      |  Jump Relative if      | If CF = 0 then Jump     | Carry Flag  |             | JNC   Roff             |  50   | 2 | 2 | - - - |
+      |  Carry Flag is Clear   |  Relative to PC         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JNZ                   |                         |             |             |                        |       |   |   |       |
+      |  Jump Relative if the  | If A<7:0> <> 0 then     | Accumulator |             | JNZ   Roff             |  70   | 2 | 2 | - - - |
+      |  Accumulator is Not    |  Jump Relative to PC    |             |             |                        |       |   |   |       |
+      |  Zero                  |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  JZ                    |                         |             |             |                        |       |   |   |       |
+      |  Jump Relative if the  | If A<7:0> = 0 then      | Accumulator |             | JZ    Roff             |  60   | 2 | 2 | - - - |
+      |  Accumulator is Zero   |  Jump Relative to PC    |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  LCALL                 |                         |             |             |                        |       |   |   |       |
+      |  Long (16 bits) Call   | PC + 3 -> STACK         | Prog Direct |             | LCALL Paddr            |  12   | 3 | 2 | - - - |
+      |                        | SP + 2 -> SP            |             |             |                        |       |   |   |       |
+      |                        | Paddr<15:0> -> PC<15:0> |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  LJMP                  |                         |             |             |                        |       |   |   |       |
+      |  Long (16 bits)        | Paddr<15:0> -> PC<15:0> | Prog Direct |             | LJMP  Paddr            |  02   | 3 | 2 | - - - |
+      |  Absolute Jump         |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  MOV                   |                         |             |             |                        |       |   |   |       |
+      |  Move Source Operand   | SOper -> DOper          | Accumulator | Immediate   | MOV   A,#data          |  74   | 2 | 1 | - - - |
+      |  to Destination        |                         |      "      | Direct      | MOV   A,Daddr          |  E5   | 2 | 1 |       |
+      |  Operand               |                         |      "      | Indirect    | MOV   A,@Ri            | E6,E7 | 1 | 1 |       |
+      |                        |                         |      "      | Register    | MOV   A,Rn             | E8-EF | 1 | 1 |       |
+      |                        |                         | Direct      | Accumulator | MOV   Daddr,A          |  F5   | 2 | 1 |       |
+      |                        |                         |   "         | Immediate   | MOV   Daddr,#data      |  75   | 3 | 2 |       |
+      |                        |                         |   "         | Direct      | MOV   Daddr,Daddr      |  85   | 3 | 2 |       |
+      |                        |                         |   "         | Indirect    | MOV   Daddr,@Ri        | 86,87 | 2 | 2 |       |
+      |                        |                         |   "         | Register    | MOV   Daddr,Rn         | 88-8F | 2 | 2 |       |
+      |                        |                         | Indirect    | Accumulator | MOV   @Ri,A            | F6,F7 | 1 | 1 |       |
+      |                        | SOper -> DOper          |    "        | Immediate   | MOV   @Ri,#data        | 76,77 | 2 | 1 |       |
+      |                        |                         |    "        | Direct      | MOV   @Ri,Daddr        | A6,A7 | 2 | 2 |       |
+      |                        |                         | Register    | Accumulator | MOV   Rn,A             | F8-FF | 1 | 1 |       |
+      |                        |                         |    "        | Immediate   | MOV   Rn,#data         | 78-7F | 2 | 1 |       |
+      |                        |                         |    "        | Direct      | MOV   Rn,Daddr         | A8-AF | 2 | 2 |       |
+      |                        |                         | Data Pointer| Immediate   | MOV   DPTR,#data16     |  90   | 3 | 2 |       |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Move Carry Flag to Bit| CF -> DOper             | Bit Direct  | Carry Flag  | MOV   Baddr,C          |  92   | 2 | 2 | - - - |
+      |  Destination Operand   |                         |             |             |                        |       |   |   |       |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Move Bit Destination  | DOper -> CF             | Carry Flag  | Bit Direct  | MOV   C,Baddr          |  A2   | 2 | 1 | * - - |
+      |  Operand to Carry Flag |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  MOVC                  |                         |             |             |                        |       |   |   |       |
+      |  Move byte from        | PM(DPTR<15:0> + A<7:0>) | Accumulator | Prog Ind    | MOVC  A,@A+DPTR        |  93   | 1 | 2 | - - - |
+      |  Program Memory to     |   -> A<7:0>             |             |             |                        |       |   |   |       |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        | PM(PC<15:0> + A<7:0>)   | Accumulator | Prog Ind    | MOVC  A,@A+PC          |  83   | 1 | 2 | - - - |
+      |                        |   -> A<7:0>             |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  MOVX                  |                         |             |             |                        |       |   |   |       |
+      |  Move byte from        | SOper -> A              | Accumulator | Indirect    | MOVX  A,@Ri            | E2,E3 | 1 | 2 | - - - |
+      |  External Data Memory  |                         |      "      |    "        | MOVX  A,@DPTR          |  E0   | 1 | 2 |       |
+      |  to the Accumulator    |                         |             |             |                        |       |   |   |       |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Move byte in the      | A -> DOper              | Indirect    | Accumulator | MOVX  @Ri,A            | F2,F3 | 1 | 2 | - - - |
+      |  Accumulator to        |                         |    "        |      "      | MOVX  @DPTR,A          |  F0   | 1 | 2 |       |
+      |  External Data Memory  |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  MUL                   |                         |             |             |                        |       |   |   |       |
+      |  Multiply Accumulator  | A X B -> B,A            | AB          |             | MUL   AB               |  A4   | 1 | 4 | 0 - * |
+      |  by B Register         | (see note 7)            |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  NOP                   |                         |             |             |                        |       |   |   |       |
+      |  No Operation          |                         |             |             | NOP                    |  00   | 1 | 1 | - - - |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  ORL                   |                         |             |             |                        |       |   |   |       |
+      |  Logical Inclusive OR  | SOper v DOper -> DOper  | Direct      | Accumulator | ORL   Daddr,A          |  42   | 2 | 1 | - - - |
+      |  of Source Operand     |                         |   "         | Immediate   | ORL   Daddr,#data      |  43   | 3 | 2 |       |
+      |  with Destination      |                         | Accumulator | Immediate   | ORL   A,#data          |  44   | 2 | 1 |       |
+      |  Operand               |                         |      "      | Direct      | ORL   A,Daddr          |  45   | 2 | 1 |       |
+      |                        |                         |      "      | Indirect    | ORL   A,@Ri            | 46,47 | 1 | 1 |       |
+      |                        |                         |      "      | Register    | ORL   A,Rn             | 48-4F | 1 | 1 |       |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  Logical Inclusive OR  | SOper v CF -> CF        | Carry Flag  | Bit Direct  | ORL   C,Baddr          |  72   | 2 | 2 | * - - |
+      |  of Source Operand     |                         |             |             |                        |       |   |   |       |
+      |  with Carry Flag       |                         |             |             |                        |       |   |   |       |
+      |      (continued)       |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  ORL(continued)        |                         |             |             |                        |       |   |   |       |
+      |  Logical Inclusive OR  | ~SOper v CF -> CF       | Carry Flag  | Bit Direct  | ORL   C,/Baddr         |  A0   | 2 | 2 | * - - |
+      |  of Source Operand     |                         |             |             |                        |       |   |   |       |
+      |  Complemented with     |                         |             |             |                        |       |   |   |       |
+      |  Carry Flag            |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  POP                   |                         |             |             |                        |       |   |   |       |
+      |  Pop Stack and Place   | STACK -> DOper          | Direct      | Stack       | POP   Daddr            |  D0   | 2 | 2 | - - - |
+      |  in Destination Operand| SP - 1 -> SP            |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  PUSH                  |                         |             |             |                        |       |   |   |       |
+      |  Push Source Operand   | SP + 1 -> SP            | Stack       | Direct      | PUSH  Daddr            |  C0   | 2 | 2 | - - - |
+      |  onto Stack            | SOper -> STACK          |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  RET                   |                         |             |             |                        |       |   |   |       |
+      |  Return from           | STACK -> PC<15:8>       |             |             | RET                    |  22   | 1 | 2 | - - - |
+      |  Subroutine            | SP - 1 -> SP            |             |             |                        |       |   |   |       |
+      |                        | STACK -> PC<7:0>        |             |             |                        |       |   |   |       |
+      |                        | SP - 1 -> SP            |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  RETI                  |                         |             |             |                        |       |   |   |       |
+      |  Return from           | STACK -> PC<15:8>       |             |             | RETI                   |  32   | 1 | 2 | - - - |
+      |  Interrupt Routine     | SP - 1 -> SP            |             |             |                        |       |   |   |       |
+      |                        | STACK -> PC<7:0>        |             |             |                        |       |   |   |       |
+      |                        | SP - 1 -> SP            |             |             |                        |       |   |   |       |
+      |                        | 0 -> Intrupt Active Flag|             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  RL                    |                         |             |             |                        |       |   |   |       |
+      |  Rotate Accumulator    | A<6:0> -> A<7:1>        | Accumulator |             | RL    A                |  23   | 1 | 1 | - - - |
+      |  Left One Bit          | A<7> -> A<0>            |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  RLC                   |                         |             |             |                        |       |   |   |       |
+      |  Rotate Accumulator    | A<6:0> -> A<7:1>        | Accumulator |             | RLC   A                |  33   | 1 | 1 | * - - |
+      |  Left One Bit Thru     | CF -> A<0>              |             |             |                        |       |   |   |       |
+      |  the Carry Flag        | A<7> -> CF              |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  RR                    |                         |             |             |                        |       |   |   |       |
+      |  Rotate Accumulator    | A<7:1> -> A<6:0>        | Accumulator |             | RR    A                |  03   | 1 | 1 | - - - |
+      |  Right One Bit         | A<0> -> A<7>            |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  RRC                   |                         |             |             |                        |       |   |   |       |
+      |  Rotate Accumulator    | A<7:1> -> A<6:0>        | Accumulator |             | RRC   A                |  13   | 1 | 1 | * - - |
+      |  Right One Bit Thru    | CF -> A<7>              |             |             |                        |       |   |   |       |
+      |  the Carry Flag        | A<0> -> CF              |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  SETB                  |                         |             |             |                        |       |   |   |       |
+      |  Set Bit Operand       | 1 -> CF                 | Carry Flag  |             | SETB  C                |  D3   | 1 | 1 | 1 - - |
+      |                        |-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        | 1 -> DOper              | Bit Direct  |             | SETB  Baddr            |  D2   | 2 | 1 | - - - |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  SJMP                  |                         |             |             |                        |       |   |   |       |
+      |  Short (8 bits)        | Jump Relative to PC     |             |             | SJMP  Roff             |  80   | 2 | 2 | - - - |
+      |  Relative Jump         |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  SUBB                  |                         |             |             |                        |       |   |   |       |
+      |  Subtract Operand with | A - SOper - CF -> A     | Accumulator | Immediate   | SUBB  A,#data          |  94   | 2 | 1 | * * * |
+      |  Borrow from the       |                         |      "      | Direct      | SUBB  A,Daddr          |  95   | 2 | 1 |       |
+      |  Accumulator           |                         |      "      | Indirect    | SUBB  A,@Ri            | 96,97 | 1 | 1 |       |
+      |                        |                         |      "      | Register    | SUBB  A,Rn             | 98-9F | 1 | 1 |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  SWAP                  |                         |             |             |                        |       |   |   |       |
+      |  Swap Nibbles within   | A<7:4> -> A<3:0>        | Accumulator |             | SWAP  A                |  C4   | 1 | 1 | - - - |
+      |  the Accumulator       | A<3:0> -> A<7:4>        |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |                        |                         |  DEST       | SOURCE      |   ASSEMBLY             |HEX    |B  |C  | PSW   |
+      |   MNEMONIC             |  OPERATION              |  ADDR       |  ADDR       |   LANGUAGE             |OP-    |Y  |Y  |C A O  |
+      |                        |                         |  MODE       |  MODE       |     FORM               |CODE   |T  |C  |F C V  |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  XCH                   |                         |             |             |                        |       |   |   |       |
+      |  Exchange bytes of the | SOper<7:0> -> A<7:0>    | Accumulator | Direct      | XCH   A,Daddr          |  C5   | 2 | 1 | - - - |
+      |  Accumulator and the   | A<7:0> -> SOper<7:0>    |      "      | Indirect    | XCH   A,@Ri            | C6,C7 | 1 | 1 |       |
+      |  Source Operand        |                         |      "      | Register    | XCH   A,Rn             | C8-CF | 1 | 1 |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  XCHD                  |                         |             |             |                        |       |   |   |       |
+      |  Exchange the Least    | SOper<3:0> -> A<3:0>    | Accumulator | Indirect    | XCHD  A,@Ri            | D6,D7 | 1 | 1 | - - - |
+      |  Significant Nibble of | A<3:0> -> SOper<3:0>    |             |             |                        |       |   |   |       |
+      |  the Accumulator and   |                         |             |             |                        |       |   |   |       |
+      |  the Source Operand    |                         |             |             |                        |       |   |   |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+      |  XRL                   |                         |             |             |                        |       |   |   |       |
+      |  Logical Exclusive OR  | SOper v DOper -> DOper  | Direct      | Accumulator | XRL   Daddr,A          |  62   | 2 | 1 | - - - |
+      |  of Source Operand     |                         |   "         | Immediate   | XRL   Daddr,#data      |  63   | 3 | 2 |       |
+      |  with Destination      |                         | Accumulator | Immediate   | XRL   A,#data          |  64   | 2 | 1 |       |
+      |  Operand               |                         |      "      | Direct      | XRL   A,Daddr          |  65   | 2 | 1 |       |
+      |                        |                         |      "      | Indirect    | XRL   A,@Ri            | 66,67 | 1 | 1 |       |
+      |                        |                         |      "      | Register    | XRL   A,Rn             | 68-6F | 1 | 1 |       |
+      |------------------------|-------------------------|-------------|-------------|------------------------|-------|---|---|-------|
+
+      BMULB           BYTE SIGNED MULTIPLY                                                                       JUL-30-84   PAGE 1
+      
+      
+                             1    ;
+                             2    ;  8-bit by 8-bit signed multiply--byte signed multiply
+                             3    ;
+                             4    ;    This routine takes the signed byte in multiplicand and
+                             5    ;    multiplies it by the signed byte in multiplier and places
+                             6    ;    the signed 16-bit product in product_high and product_low.
+                             7    ;
+                             8    ;    This routine assumes 2s complement representation of signed
+                             9    ;    numbers.  The maximum numbers possible is then -128 and +127.
+                            10    ;    Multiplying the possible maximum numbers together easily fits
+                            11    ;    in a 16-bit product, so no overflow test is done on the answer.
+                            12    ;
+                            13    ;    Registers altered by routine: A, B, PSW.
+                            14    ;
+                            15    ;
+                            16    ;  Primary controls
+                            17    $MOD51
+                            18    $TITLE(BYTE SIGNED MULTIPLY)
+                            19    $DATE(JUL-30-84)
+                            20    $PAGEWIDTH(132)
+                            21    $OBJECT(B:BMULB.OBJ)
+                            22    ;
+                            23    ;
+                            24    ;  Variable declarations
+                            25    ;
+        00F0                26    sign_flag       BIT     0F0H            ;sign of product
+        0030                27    multiplier      DATA    030H            ;8-bit multiplier
+        0031                28    multiplicand    DATA    031H            ;8-bit multiplicand
+        0032                29    product_high    DATA    032H            ;high byte of 16-bit answer
+        0033                30    product_low     DATA    033H            ;low byte of answer
+                            31    ;
+                            32    ;
+                            33    ;
+      0100                  34            ORG     100H                    ;arbitrary start
+                            35    ;
+      0100                  36    byte_signed_multiply:
+      0100 C2F0             37                    CLR     sign_flag       ;reset sign
+      0102 E530             38                    MOV     A,multiplier    ;put multiplier in accumulator
+      0104 30E704           39                    JNB     ACC.7,positive  ;test sign bit of multiplier
+      0107 F4               40                    CPL     A               ;negative--complement and
+
+      BMULB           BYTE SIGNED MULTIPLY                                                                       JUL-30-84   PAGE 2
+      
+      0108 04               41                    INC     A               ;add 1 to convert to positive
+      0109 D2F0             42                    SETB    sign_flag       ;and set sign flag
+                            43    ;
+      010B 8531F0           44    positive:       MOV     B,multiplicand  ;put multiplicand in B register
+      010E 30F707           45                    JNB     B.7,multiply    ;test sign bit of multiplicand
+      0111 63F0FF           46                    XRL     B,#0FFh         ;negative--complement and
+      0114 05F0             47                    INC     B               ;add 1 to convert to positive
+      0116 B2F0             48                    CPL     sign_flag       ;complement sign flag
+                            49    ;
+      0118 A4               50    multiply:       MUL     AB              ;do unsigned multiplication
+                            51    ;
+      0119 30F00A           52    sign_test:      JNB     sign_flag,byte_signed_exit      ;if positive,done
+      011C 63F0FF           53                    XRL     B,#0FFh         ;else have to complement both
+      011F F4               54                    CPL     A               ;bytes of the product and inc
+      0120 2401             55                    ADD     A,#1            ;need add here because inc doesn't set
+      0122 5002             56                    JNC     byte_signed_exit        ;the carry flag
+      0124 05F0             57                    INC     B               ;if add overflowed A, inc the high byte
+                            58    ;
+      0126                  59    byte_signed_exit:
+      0126 85F032           60                    MOV     product_high,B  ;save the answer
+      0129 F533             61                    MOV     product_low,A   
+                            62    ;
+      012B 22               63                    RET                     ;and return
+                            64            END
+      
+      ASSEMBLY COMPLETE, 0 ERRORS FOUND
+
+      BMULB           BYTE SIGNED MULTIPLY                                                                       JUL-30-84   PAGE 3
+      
+      ACC                   D ADDR  00E0H  PREDEFINED  
+      B                     D ADDR  00F0H  PREDEFINED  
+      BYTE_SIGNED_EXIT      C ADDR  0126H  
+      BYTE_SIGNED_MULTIPLY  C ADDR  0100H  NOT USED  
+      MULTIPLICAND          D ADDR  0031H  
+      MULTIPLIER            D ADDR  0030H  
+      MULTIPLY              C ADDR  0118H  
+      POSITIVE              C ADDR  010BH  
+      PRODUCT_HIGH          D ADDR  0032H  
+      PRODUCT_LOW           D ADDR  0033H  
+      SIGN_FLAG             B ADDR  00F0H  
+      SIGN_TEST             C ADDR  0119H  NOT USED  
+

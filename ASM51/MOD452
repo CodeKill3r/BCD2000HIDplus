@@ -1,0 +1,113 @@
+;      REV.  1.1    MAY 26, 1988
+P0     DATA  080H  ;Port 0
+SP     DATA  081H  ;Stack Pointer
+DPL    DATA  082H  ;Data Pointer - Low Byte
+DPH    DATA  083H  ;Data Pointer - High Byte
+PCON   DATA  087H  ;Power Control
+TCON   DATA  088H  ;Timer Control
+TMOD   DATA  089H  ;Timer Mode
+TL0    DATA  08AH  ;Timer 0 - Low Byte
+TL1    DATA  08BH  ;Timer 1 - Low Byte
+TH0    DATA  08CH  ;Timer 0 - High Byte
+TH1    DATA  08DH  ;Timer 1 - High Byte
+P1     DATA  090H  ;Port 1
+DCON0  DATA  092H  ;DMA Control 0
+DCON1  DATA  093H  ;DMA Control 1
+SCON   DATA  098H  ;LSC Control
+SBUF   DATA  099H  ;LSC Buffer
+P2     DATA  0A0H  ;Port 2
+SARL0  DATA  0A2H  ;DMA Channel 0 Source Address - Low Byte
+SARH0  DATA  0A3H  ;DMA Channel 0 Source Address - High Byte
+IE     DATA  0A8H  ;Interrupt Enable Register 0
+P3     DATA  0B0H  ;Port 3
+SARL1  DATA  0B2H  ;DMA Channel 1 Source Address - Low Byte
+SARH1  DATA  0B3H  ;DMA Channel 1 Source Address - High Byte
+IP     DATA  0B8H  ;Interrupt Priority Register 0
+P4     DATA  0C0H  ;Port 4
+DARL0  DATA  0C2H  ;DMA Channel 0 Destination Address - Low Byte
+DARH0  DATA  0C3H  ;DMA Channel 0 Destination Address - High Byte
+PSW    DATA  0D0H  ;Program Status Word
+DARL1  DATA  0D2H  ;DMA Channel 1 Destination Address - Low Byte
+DARH1  DATA  0D3H  ;DMA Channel 1 Destination Address - High Byte
+ACC    DATA  0E0H  ;Accumulator
+BCRL0  DATA  0E2H  ;DMA Byte Count 0 - Low Byte
+BCRH0  DATA  0E3H  ;DMA Byte Count 0 - High Byte
+HSTAT  DATA  0E6H  ;Host Status
+HCON   DATA  0E7H  ;Host Control
+SLCON  DATA  0E8H  ;Slave Control
+SSTAT  DATA  0E9H  ;Slave Status
+IWPR   DATA  0EAH  ;Input Write Pointer
+IRPR   DATA  0EBH  ;Input Read Pointer
+CBP    DATA  0ECH  ;Channel Boundary Pointer
+FIN    DATA  0EEH  ;FIFO In
+CIN    DATA  0EFH  ;Command In
+B      DATA  0F0H  ;Multiplication Register
+BCRL1  DATA  0F2H  ;DMA Byte Count 1 - Low Byte
+BCRH1  DATA  0F3H  ;DMA Byte Count 1 - High Byte
+ITHR   DATA  0F6H  ;Input FIFO Threshold
+OTHR   DATA  0F7H  ;Output FIFO Threshold
+IEP    DATA  0F8H  ;Interrupt Enable & Priority
+MODE   DATA  0F9H  ;Mode Register
+ORPR   DATA  0FAH  ;Output Read Pointer
+OWPR   DATA  0FBH  ;Output Write Pointer
+IMIN   DATA  0FCH  ;Immediate Command In
+IMOUT  DATA  0FDH  ;Immediate Command Out
+FOUT   DATA  0FEH  ;FIFO Out
+COUT   DATA  0FFH  ;Command Out
+IT0    BIT   088H  ;TCON.0 - Ext. Interrupt 0 Type
+IE0    BIT   089H  ;TCON.1 - Ext. Interrupt 0 Edge Flag
+IT1    BIT   08AH  ;TCON.2 - Ext. Interrupt 1 Type
+IE1    BIT   08BH  ;TCON.3 - Ext. Interrupt 1 Edge Flag
+TR0    BIT   08CH  ;TCON.4 - Timer 0 On/Off Control
+TF0    BIT   08DH  ;TCON.5 - Timer 0 Overflow Flag
+TR1    BIT   08EH  ;TCON.6 - Timer 1 On/Off Control
+TF1    BIT   08FH  ;TCON.7 - Timer 1 Overflow Flag
+HLD    BIT   095H  ;P1.5 - Local Bus Hold I/O Signal
+HLDA   BIT   096H  ;P1.6 - Local Bus Hold Acknowledge Output
+RI     BIT   098H  ;SCON.0 - Receive Interrupt Flag
+TI     BIT   099H  ;SCON.1 - Transmit Interrupt Flag
+RB8    BIT   09AH  ;SCON.2 - Receive Bit 8
+TB8    BIT   09BH  ;SCON.3 - Transmit Bit 8
+REN    BIT   09CH  ;SCON.4 - Receive Enable
+SM2    BIT   09DH  ;SCON.5 - Serial Mode Control Bit 2
+SM1    BIT   09EH  ;SCON.6 - Serial Mode Control Bit 1
+SM0    BIT   09FH  ;SCON.7 - Serial Mode Control Bit 0
+EX0    BIT   0A8H  ;IE.0 - External Interrupt Request 0 Enable
+ET0    BIT   0A9H  ;IE.1 - Internal Timer/Counter 0 Overflow Interrupt Enable
+EX1    BIT   0AAH  ;IE.2 - External Interrupt Request 1 Enable
+ET1    BIT   0ABH  ;IE.3 - Internal Timer/Counter 1 Overflow Interrupt Enable
+ES     BIT   0ACH  ;IE.4 - Serial Port Interrupt Enable
+EA     BIT   0AFH  ;IE.7 - Global Interrupt Enable
+RXD    BIT   0B0H  ;P3.0 - Serial Port Receive Input
+TXD    BIT   0B1H  ;P3.1 - Serial Port Transmit Output
+INT0   BIT   0B2H  ;P3.2 - External Interrupt 0 Input
+INT1   BIT   0B3H  ;P3.3 - External Interrupt 1 Input
+T0     BIT   0B4H  ;P3.4 - Timer 0 Count Input
+T1     BIT   0B5H  ;P3.5 - Timer 1 Count Input
+WR     BIT   0B6H  ;P3.6 - Write Control For Ext. Memory
+RD     BIT   0B7H  ;P3.7 - Read Control For Ext. Memory
+PX0    BIT   0B8H  ;IP.0 - External Interrupt Request 0 Priority
+PT0    BIT   0B9H  ;IP.1 - Internal Timer/Counter 0 Priority
+PX1    BIT   0BAH  ;IP.2 - External Interrupt Request 1 Priority
+PT1    BIT   0BBH  ;IP.3 - Internal Timer/Counter 1 Priority
+PSC    BIT   0BCH  ;IP.4 - Local Serial Port (Channel) Priority
+P      BIT   0D0H  ;PSW.0 - Accumulator Parity Flag
+OV     BIT   0D2H  ;PSW.2 - Overflow Flag
+RS0    BIT   0D3H  ;PSW.3 - Register Bank Select 0
+RS1    BIT   0D4H  ;PSW.4 - Register Bank Select 1
+F0     BIT   0D5H  ;PSW.5 - Flag 0
+AC     BIT   0D6H  ;PSW.6 - Auxiliary Carry Flag
+CY     BIT   0D7H  ;PSW.7 - Carry Flag
+OFRS   BIT   0E8H  ;SLCON.0 - Output FIFO Channel Request for Service
+IFRS   BIT   0E9H  ;SLCON.1 - Input FIFO Channel Request for Service
+FRZ    BIT   0EBH  ;SLCON.3 - Enable FIFO DMA Freeze Mode
+ICOI   BIT   0ECH  ;SLCON.4 - Generate Interrupt when Immediate Command Out Register Available
+ICII   BIT   0EDH  ;SLCON.5 - Generate Interrupt when a command is written to Immediate Command In Register
+OFI    BIT   0EEH  ;SLCON.6 - Enable Output FIFO Interrupt
+IFI    BIT   0EFH  ;SLCON.7 - Enable Input FIFO Interrupt
+EFIFO  BIT   0F8H  ;IEP.0 - FIFO Slave Bus Interface Interrupt Enable
+PDMA1  BIT   0F9H  ;IEP.1 - DMA Channel 1 Priority
+PDMA0  BIT   0FAH  ;IEP.2 - DMA Channel 0 Priority
+EDMA1  BIT   0FBH  ;IEP.3 - DMA Channel 1 Interrupt Enable
+EDMA0  BIT   0FCH  ;IEP.4 - DMA Channel 0 Interrupt Enable
+PFIFO  BIT   0FDH  ;IEP.5 - FIFO Slave Bus Interface Interrupt Priority

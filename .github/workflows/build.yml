@@ -1,0 +1,21 @@
+name: Run Compiler with DOSBox
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install DOSBox
+        run: choco install dosbox
+
+      - name: Run Compiler in DOSBox
+        run: |
+          echo "mount C ." > dosbox.conf
+          echo "C:" >> dosbox.conf
+          echo "ASM51.EXE bcd2000hid+.8051.asm" >> dosbox.conf
+          dosbox -exit -conf dosbox.conf
+        shell: cmd

@@ -1,0 +1,80 @@
+;     REV.     1.0     FEB 15, 1988
+P0    DATA  080H    ;Port 0
+SP    DATA  081H    ;Stack Pointer
+DPL   DATA  082H    ;Data Pointer - Low Byte
+DPH   DATA  083H    ;Data Pointer - High Byte
+PCON  DATA  087H    ;Power Control
+TCON  DATA  088H    ;Timer Control
+TMOD  DATA  089H    ;Timer Mode
+TL0   DATA  08AH    ;Timer 0 - Low Byte
+TL1   DATA  08BH    ;Timer 1 - Low Byte
+TH0   DATA  08CH    ;Timer 0 - High Byte
+TH1   DATA  08DH    ;Timer 1 - High Byte
+P1    DATA  090H    ;Port 1
+SCON  DATA  098H    ;Serial Port Control
+SBUF  DATA  099H    ;Serial Port Buffer
+P2    DATA  0A0H    ;Port 2
+IE    DATA  0A8H    ;Interrupt Enable Register 0
+P3    DATA  0B0H    ;Port 3
+IP    DATA  0B8H    ;Interrupt Enable Register 1
+IRCON DATA  0C0H    ;Interrupt Request Control
+PSW   DATA  0D0H    ;Program Status Word
+ADCON DATA  0D8H    ;A/D Converter Control
+ADDAT DATA  0D9H    ;A/D Converter Data
+DAPR  DATA  0DAH    ;D/A Converter Program Register
+P6    DATA  0DBH    ;Port 6
+ACC   DATA  0E0H    ;Accumulator
+P4    DATA  0E8H    ;Port 4
+B     DATA  0F0H    ;Multiplication Register
+P5    DATA  0F8H    ;Port 5
+IT0   BIT   088H    ;TCON.0 - External Interrupt 0 Type
+IE0   BIT   089H    ;TCON.1 - External Interrupt 0 Edge Flag
+IT1   BIT   08AH    ;TCON.2 - External Interrupt 1 Type
+IE1   BIT   08BH    ;TCON.3 - External Interrupt 1 Edge Flag
+TR0   BIT   08CH    ;TCON.4 - Timer 0 On/Off Control
+TF0   BIT   08DH    ;TCON.5 - Timer 0 Overflow Flag
+TR1   BIT   08EH    ;TCON.6 - Timer 1 On/Off Control
+TF1   BIT   08FH    ;TCON.7 - Timer 1 Overflow Flag
+RI    BIT   098H    ;SCON.0 - Receive Interrupt Flag
+TI    BIT   099H    ;SCON.1 - Transmit Interrupt Flag
+RB8   BIT   09AH    ;SCON.2 - Receive Bit 8
+TB8   BIT   09BH    ;SCON.3 - Transmit Bit 8
+REN   BIT   09CH    ;SCON.4 - Receive Enable
+SM2   BIT   09DH    ;SCON.5 - Serial Mode Control Bit 2
+SM1   BIT   09EH    ;SCON.6 - Serial Mode Control Bit 1
+SM0   BIT   09FH    ;SCON.7 - Serial Mode Control Bit 0
+EX0   BIT   0A8H    ;IE.0 - External Interrupt 0 Enable
+ET0   BIT   0A9H    ;IE.1 - Timer 0 Interrupt Enable
+EX1   BIT   0AAH    ;IE.2 - External Interrupt 1 Enable
+ET1   BIT   0ABH    ;IE.3 - Timer 1 Interrupt Enable
+ES    BIT   0ACH    ;IE.4 - Serial Port Interrupt Enable
+EA    BIT   0AFH    ;IE.7 - Global Interrupt Enable
+RXD   BIT   0B0H    ;P3.0 - Serial Port Receive Input
+TXD   BIT   0B1H    ;P3.1 - Serial Port Transmit Output
+INT0  BIT   0B2H    ;P3.2 - External Interrupt 0 Input
+INT1  BIT   0B3H    ;P3.3 - External Interrupt 1 Input
+T0    BIT   0B4H    ;P3.4 - Timer 0 Count Input
+T1    BIT   0B5H    ;P3.5 - Timer 1 Count Input
+WR    BIT   0B6H    ;P3.6 - Write Control for External Memory
+RD    BIT   0B7H    ;P3.7 - Read Control for External Memory
+PX0   BIT   0B8H    ;IP.0 - External Interrupt 0 Priority
+PT0   BIT   0B9H    ;IP.1 - Timer 0 Priority
+PX1   BIT   0BAH    ;IP.2 - External Interrupt 1 Priority
+PT1   BIT   0BBH    ;IP.3 - Timer 1 Priority
+PS    BIT   0BCH    ;IP.4 - Serial Port Priority
+IADC  BIT   0C0H    ;IRCON.0 - A/D Converter Interrupt Request
+P     BIT   0D0H    ;PSW.0 - Accumulator Parity Flag
+F1    BIT   0D1H    ;PSW.1 - Flag 1
+OV    BIT   0D2H    ;PSW.2 - Overflow Flag
+RS0   BIT   0D3H    ;PSW.3 - Register Bank Select 0
+RS1   BIT   0D4H    ;PSW.4 - Register Bank Select 1
+F0    BIT   0D5H    ;PSW.5 - Flag 0
+AC    BIT   0D6H    ;PSW.6 - Auxiliary Carry Flag
+CY    BIT   0D7H    ;PSW.7 - Carry Flag
+MX0   BIT   0D8H    ;ADCON.0 - Analog Input Channel Select Bit 0
+MX1   BIT   0D9H    ;ADCON.1 - Analog Input Channel Select Bit 1
+MX2   BIT   0DAH    ;ADCON.2 - Analog Input Channel Select Bit 2
+ADM   BIT   0DBH    ;ADCON.3 - A/D Conversion Mode
+BSY   BIT   0DCH    ;ADCON.4 - Busy Flag
+CLK   BIT   0DEH    ;ADCON.6 - System Clock Enable
+BD    BIT   0DFH    ;ADCON.7 - Baud Rate Enable

@@ -1,0 +1,184 @@
+;March 06, 1989
+P0      DATA    080H    ;Port 0
+SP      DATA    081H    ;Stack Pointer
+DPL     DATA    082H    ;Data Pointer - Low Byte
+DPH     DATA    083H    ;Data Pointer - High Byte
+WDTREL  DATA    086H    ;Watchdog Timer Reload
+PCON    DATA    087H    ;Power Control
+TCON    DATA    088H    ;Timer Control
+TMOD    DATA    089H    ;Timer Mode
+TL0     DATA    08AH    ;Timer 0 - Low Byte
+TL1     DATA    08BH    ;Timer 1 - Low Byte
+TH0     DATA    08CH    ;Timer 0 - High Byte
+TH1     DATA    08DH    ;Timer 1 - High Byte
+P1      DATA    090H    ;Port 1
+DPSEL   DATA    092H    ;Data Pointer Select Register
+S0BUF   DATA    099H    ;Serial Channel 0 Buffer
+S0CON   DATA    098H    ;Serial Channel 0 Control
+IEN2    DATA    09AH    ;Interrupt Enable Register 2
+S1CON   DATA    09BH    ;Serial Channel 1 Control
+S1BUF   DATA    09CH    ;Serial Channel 1 Buffer
+S1REL   DATA    09DH    ;Serial Channel 1 Reload
+P2      DATA    0A0H    ;Port 2
+IEN0    DATA    0A8H    ;Interrupt Enable Register 0
+IP0     DATA    0A9H    ;Interrupt Priority Register 0
+P3      DATA    0B0H    ;Port 3
+IEN1    DATA    0B8H    ;Interrupt Enable Register 1
+IP1     DATA    0B9H    ;Interrupt Priority Register 1
+IRCON   DATA    0C0H    ;Interrupt Request Control
+CCEN    DATA    0C1H    ;Compare/Capture Enable
+CCL1    DATA    0C2H    ;Compare/Capture Register 1 - Low Byte
+CCH1    DATA    0C3H    ;Compare/Capture Register 1 - High Byte
+CCL2    DATA    0C4H    ;Compare/Capture Register 2 - Low Byte
+CCH2    DATA    0C5H    ;Compare/Capture Register 2 - High Byte
+CCL3    DATA    0C6H    ;Compare/Capture Register 3 - Low Byte
+CCH3    DATA    0C7H    ;Compare/Capture Register 3 - High Byte
+T2CON   DATA    0C8H    ;Timer 2 Control
+CC4EN   DATA    0C9H    ;Compare/Capture 4 Enable
+CRCL    DATA    0CAH    ;Compare/Reload/Capture - Low Byte
+CRCH    DATA    0CBH    ;Compare/Reload/Capture - High Byte
+TL2     DATA    0CCH    ;Timer 2 - Low Byte
+TH2     DATA    0CDH    ;Timer 2 - High Byte
+CCL4    DATA    0CEH    ;Compare/Capture Register 4 - Low Byte
+CCH4    DATA    0CFH    ;Compare/Capture Register 4 - High Byte
+PSW     DATA    0D0H    ;Program Status Word
+CML0    DATA    0D2H    ;Compare Register 0 - Low Byte
+CMH0    DATA    0D3H    ;Compare Register 0 - High Byte
+CML1    DATA    0D4H    ;Compare Register 1 - Low Byte
+CMH1    DATA    0D5H    ;Compare Register 1 - High Byte
+CML2    DATA    0D6H    ;Compare Register 2 - Low Byte
+CMH2    DATA    0D7H    ;Compare Register 2 - High Byte
+ADCON0  DATA    0D8H    ;A/D Converter Control Register 0
+ADDAT   DATA    0D9H    ;A/D Converter Data Register
+DAPR    DATA    0DAH    ;D/A Converter Program Register
+P7      DATA    0DBH    ;Port 7
+ADCON1  DATA    0DCH    ;A/D Converter Control Register 1
+P8      DATA    0DDH    ;Port 8
+CTRELL  DATA    0DEH    ;Compare Timer Rel. Reg. - Low Byte
+CTRELH  DATA    0DFH    ;Compare Timer Rel. Reg. - High Byte
+ACC     DATA    0E0H    ;Accumulator
+CTCON   DATA    0E1H    ;Compare Timer Control Register
+CML3    DATA    0E2H    ;Compare Register 3 - Low Byte
+CMH3    DATA    0E3H    ;Compare Register 3 - High Byte
+CML4    DATA    0E4H    ;Compare Register 4 - Low Byte
+CMH4    DATA    0E5H    ;Compare Register 4 - High Byte
+CML5    DATA    0E6H    ;Compare Register 5 - Low Byte
+CMH5    DATA    0E7H    ;Compare Register 5 - High Byte
+P4      DATA    0E8H    ;Port 4
+MD0     DATA    0E9H    ;Multiplication/Division Register 0
+MD1     DATA    0EAH    ;Multiplication/Division Register 1
+MD2     DATA    0EBH    ;Multiplication/Division Register 2
+MD3     DATA    0ECH    ;Multiplication/Division Register 3
+MD4     DATA    0EDH    ;Multiplication/Division Register 4
+MD5     DATA    0EEH    ;Multiplication/Division Register 5
+ARCON   DATA    0EFH    ;Arithmetic Control Register
+B       DATA    0F0H    ;Multiplication Register
+CML6    DATA    0F2H    ;Compare Register 6 - Low Byte
+CMH6    DATA    0F3H    ;Compare Register 6 - High Byte
+CML7    DATA    0F4H    ;Compare Register 7 - Low Byte
+CMH7    DATA    0F5H    ;Compare Register 7 - High Byte
+CMEN    DATA    0F6H    ;Compare Enable Register
+CMSEL   DATA    0F7H    ;Compare Input Select
+P5      DATA    0F8H    ;Port 5
+P6      DATA    0FAH    ;Port 6
+IT0     BIT     088H    ;TCON.0 - External Interrupt 0 Type
+IE0     BIT     089H    ;TCON.1 - External Interrupt 0 Edge Flag
+IT1     BIT     08AH    ;TCON.2 - External Interrupt 1 Type
+IE1     BIT     08BH    ;TCON.3 - External Interrupt 1 Edge Flag
+TR0     BIT     08CH    ;TCON.4 - Timer 0 On/Off Control
+TF0     BIT     08DH    ;TCON.5 - Timer 0 Overflow Flag
+TR1     BIT     08EH    ;TCON.6 - Timer 1 On/Off Control
+TF1     BIT     08FH    ;TCON.7 - Timer 1 Overflow Flag
+INT3    BIT     090H    ;P1.0 - External Interrupt 3
+INT4    BIT     091H    ;P1.1 - External Interrupt 4
+INT5    BIT     092H    ;P1.2 - External Interrupt 5
+INT6    BIT     093H    ;P1.3 - External Interrupt 6
+INT2    BIT     094H    ;P1.4 - External Interrupt 2
+T2EX    BIT     095H    ;P1.5 - Timer 2 External Reload Trigger Input
+CLKOUT  BIT     096H    ;P1.6 - System Clock Output
+T2      BIT     097H    ;P1.7 - Timer 2 Input
+CC0     BIT     090H    ;P1.0 - Capture & Compare 0
+CC1     BIT     091H    ;P1.1 - Capture & Compare 1
+CC2     BIT     092H    ;P1.2 - Capture & Compare 2
+CC3     BIT     093H    ;P1.3 - Capture & Compare 3
+CC4     BIT     094H    ;P1.4 - Capture & Compare 4
+RI0     BIT     098H    ;S0CON.0 - Receive Interrupt Flag
+TI0     BIT     099H    ;S0CON.1 - Transmit Interrupt Flag
+RB80    BIT     09AH    ;S0CON.2 - Receive Bit 8
+TB80    BIT     09BH    ;S0CON.3 - Transmit Bit 8
+REN0    BIT     09CH    ;S0CON.4 - Receive Enable
+SM20    BIT     09DH    ;S0CON.5 - Serial Mode Control Bit 2
+SM1     BIT     09EH    ;S0CON.6 - Serial Mode Control Bit 1
+SM0     BIT     09FH    ;S0CON.7 - Serial Mode Control Bit 0
+EX0     BIT     0A8H    ;IEN0.0 - External Interrupt 0 Enable
+ET0     BIT     0A9H    ;IEN0.1 - Timer 0 Interrupt Enable
+EX1     BIT     0AAH    ;IEN0.2 - External Interrupt 1 Enable
+ET1     BIT     0ABH    ;IEN0.3 - Timer 1 Interrupt Enable
+ES0     BIT     0ACH    ;IEN0.4 - Serial Port 0 Interrupt Enable
+ET2     BIT     0ADH    ;IEN0.5 - Timer 2 Interrupt Enable
+WDT     BIT     0AEH    ;IEN0.6 - Watchdog Timer Reset
+EAL     BIT     0AFH    ;IEN0.7 - Global Interrupt Enable
+RXD     BIT     0B0H    ;P3.0 - Serial Port Receive Input
+TXD     BIT     0B1H    ;P3.1 - Serial Port Transmit Output
+INT0    BIT     0B2H    ;P3.2 - External Interrupt 0 Input
+INT1    BIT     0B3H    ;P3.3 - External Interrupt 1 Input
+T0      BIT     0B4H    ;P3.4 - Timer 0 Count Input
+T1      BIT     0B5H    ;P3.5 - Timer 1 Count Input
+WR      BIT     0B6H    ;P3.6 - Write Control for External Memory
+RD      BIT     0B7H    ;P3.7 - Read Control for External Memory
+EADC    BIT     0B8H    ;IEN1.0 - A/D Converter Interrupt Enable
+EX2     BIT     0B9H    ;IEN1.1 - External Interrupt 2 Enable
+EX3     BIT     0BAH    ;IEN1.2 - External Interrupt 3 / Capture/Compare Interrupt 0 Enable
+EX4     BIT     0BBH    ;IEN1.3 - External Interrupt 4 / Capture/Compare Interrupt 1 Enable
+EX5     BIT     0BCH    ;IEN1.4 - External Interrupt 5 / Capture/Compare Interrupt 2 Enable
+EX6     BIT     0BDH    ;IEN1.5 - External Interrupt 6 / Capture/Compare Interrupt 3 Enable
+SWDT    BIT     0BEH    ;IEN1.6 - Watchdog Timer Start
+EXEN2   BIT     0BFH    ;IEN1.7 - Timer 2 External Reload Interrupt
+IADC    BIT     0C0H    ;IRCON.0 - A/D Converter Interrupt Request
+IEX2    BIT     0C1H    ;IRCON.1 - External Interrupt 2 Edge Flag
+IEX3    BIT     0C2H    ;IRCON.2 - External Interrupt 3 Edge Flag
+IEX4    BIT     0C3H    ;IRCON.3 - External Interrupt 4 Edge Flag
+IEX5    BIT     0C4H    ;IRCON.4 - External Interrupt 5 Edge Flag
+IEX6    BIT     0C5H    ;IRCON.5 - External Interrupt 6 Edge Flag
+TF2     BIT     0C6H    ;IRCON.6 - Timer 2 Overflow Flag
+EXF2    BIT     0C7H    ;IRCON.7 - Timer 2 External Reload Flag
+T2I0    BIT     0C8H    ;T2CON.0 - Timer 2 Input Select Bit 0
+T2I1    BIT     0C9H    ;T2CON.1 - Timer 2 Input Select Bit 1
+T2CM    BIT     0CAH    ;T2CON.2 - Compare Mode
+T2R0    BIT     0CBH    ;T2CON.3 - Timer 2 Reload Mode Select Bit 0
+T2R1    BIT     0CCH    ;T2CON.4 - Timer 2 Reload Mode Select Bit 1
+I2FR    BIT     0CDH    ;T2CON.5 - External Interrupt 2 Falling/Rising Edge Flag
+I3FR    BIT     0CEH    ;T2CON.6 - External Interrupt 3 Falling/Rising Edge Flag
+T2PS    BIT     0CFH    ;T2CON.7 - Prescaler Select Bit
+P       BIT     0D0H    ;PSW.0 - Accumulator Parity Flag
+F1      BIT     0D1H    ;PSW.1 - Flag 1
+OV      BIT     0D2H    ;PSW.2 - Overflow Flag
+RS0     BIT     0D3H    ;PSW.3 - Register Bank Select 0
+RS1     BIT     0D4H    ;PSW.4 - Register Bank Select 1
+F0      BIT     0D5H    ;PSW.5 - Flag 0
+AC      BIT     0D6H    ;PSW.6 - Auxiliary Carry Flag
+CY      BIT     0D7H    ;PSW.7 - Carry Flag
+MX0     BIT     0D8H    ;ADCON0.0 - Analog Input Channel Select Bit 0
+MX1     BIT     0D9H    ;ADCON0.1 - Analog Input Channel Select Bit 1
+MX2     BIT     0DAH    ;ADCON0.2 - Analog Input Channel Select Bit 2
+ADM     BIT     0DBH    ;ADCON0.3 - A/D Conversion Mode
+BSY     BIT     0DCH    ;ADCON0.4 - A/D Busy Flag
+ADEX    BIT     0DDH    ;ADCON0.5 - A/D Internal/External Start
+CLK     BIT     0DEH    ;ADCON0.6 - System Clock Enable
+BD      BIT     0DFH    ;ADCON0.7 - Baud Rate Enable
+CM0     BIT     0E8H    ;P4.0 - Compare 0 of Compare Unit 2
+CM1     BIT     0E9H    ;P4.1 - Compare 1 of Compare Unit 2
+CM2     BIT     0EAH    ;P4.2 - Compare 2 of Compare Unit 2
+CM3     BIT     0EBH    ;P4.3 - Compare 3 of Compare Unit 2
+CM4     BIT     0ECH    ;P4.4 - Compare 4 of Compare Unit 2
+CM5     BIT     0EDH    ;P4.5 - Compare 5 of Compare Unit 2
+CM6     BIT     0EEH    ;P4.6 - Compare 6 of Compare Unit 2
+CM7     BIT     0EFH    ;P4.7 - Compare 7 of Compare Unit 2
+CCM0    BIT     0F8H    ;P5.0 - Concurrent Compare 0
+CCM1    BIT     0F9H    ;P5.1 - Concurrent Compare 1
+CCM2    BIT     0FAH    ;P5.2 - Concurrent Compare 2
+CCM3    BIT     0FBH    ;P5.3 - Concurrent Compare 3
+CCM4    BIT     0FCH    ;P5.4 - Concurrent Compare 4
+CCM5    BIT     0FDH    ;P5.5 - Concurrent Compare 5
+CCM6    BIT     0FEH    ;P5.6 - Concurrent Compare 6
+CCM7    BIT     0FFH    ;P5.7 - Concurrent Compare 7

@@ -1,0 +1,69 @@
+;      REV   1.0     JULY 6, 1988
+P0     DATA  080h   ;Port 0
+SP     DATA  081h   ;Stack Pointer
+DPL    DATA  082h   ;Data Pointer - Low Byte
+DPH    DATA  083h   ;Data Pointer - High Byte
+DPL1   DATA  084h   ;Data Pointer 1 - Low Byte
+DPH1   DATA  085h   ;Data Pointer 1 - High Byte
+DPS    DATA  086h   ;Data Pointer Selection
+PCON   DATA  087h   ;Power Control
+TCON   DATA  088h   ;Timer Control
+TMOD   DATA  089h   ;Timer Mode
+TL0    DATA  08Ah   ;Timer 0 - Low Byte
+TL1    DATA  08Bh   ;Timer 1 - Low Byte
+TH0    DATA  08Ch   ;Timer 0 - High Byte
+TH1    DATA  08Dh   ;Timer 1 - High Byte
+P1     DATA  090h   ;Port 1
+SCON   DATA  098h   ;Serial Port Control
+SBUF   DATA  099h   ;Serial Port Buffer
+P2     DATA  0A0h   ;Port 2
+IE     DATA  0A8h   ;Interrupt Enable
+WDS    DATA  0A9h   ;Watchdog Selection
+WDK    DATA  0AAh   ;Watchdog Key
+P3     DATA  0B0h   ;Port 3
+IP     DATA  0B8h   ;Interrupt Priority
+PSW    DATA  0D0h   ;Program Status Word
+ACC    DATA  0E0h   ;Accumulator
+B      DATA  0F0h   ;Multiplication Register
+IT0    BIT   088h   ;TCON.0 - External Interrupt 0 Type
+IE0    BIT   089h   ;TCON.1 - External Interrupt 0 Edge Flag
+IT1    BIT   08Ah   ;TCON.2 - External Interrupt 1 Type
+IE1    BIT   08Bh   ;TCON.3 - External Interrupt 1 Edge Flag
+TR0    BIT   08Ch   ;TCON.4 - Timer 0 On/Off Control
+TF0    BIT   08Dh   ;TCON.5 - Timer 0 Overflow Flag
+TR1    BIT   08Eh   ;TCON.6 - Timer 1 On/Off Control
+TF1    BIT   08Fh   ;TCON.7 - Timer 1 Overflow Flag
+RI     BIT   098h   ;SCON.0 - Receive Interrupt Flag
+TI     BIT   099h   ;SCON.1 - Transmit Interrupt Flag
+RB8    BIT   09Ah   ;SCON.2 - Receive Bit 8
+TB8    BIT   09Bh   ;SCON.3 - Transmit Bit 8
+REN    BIT   09Ch   ;SCON.4 - Receive Enable
+SM2    BIT   09Dh   ;SCON.5 - Serial Mode Control Bit 2
+SM1    BIT   09Eh   ;SCON.6 - Serial Mode Control Bit 1
+SM0    BIT   09Fh   ;SCON.7 - Serial Mode Control Bit 0
+EX0    BIT   0A8h   ;IE.0 - External Interrupt 0 Enable
+ET0    BIT   0A9h   ;IE.1 - Timer 0 Interrupt Enable
+EX1    BIT   0AAh   ;IE.2 - External Interrupt 1 Enable
+ET1    BIT   0ABh   ;IE.3 - Timer 1 Interrupt Enable
+ES     BIT   0ACh   ;IE.4 - Serial Port Interrupt Enable
+EA     BIT   0AFh   ;IE.7 - Global Interrupt Enable
+RXD    BIT   0B0h   ;P3.0 - Serial Port Receive Input
+TXD    BIT   0B1h   ;P3.1 - Serial Port Transmit Output
+INT0   BIT   0B2h   ;P3.2 - External Interrupt 0 Input
+INT1   BIT   0B3h   ;P3.3 - External Interrupt 1 Input
+T0     BIT   0B4h   ;P3.4 - Timer 0 Count Input
+T1     BIT   0B5h   ;P3.5 - Timer 1 Count Input
+WR     BIT   0B6h   ;P3.6 - Write Control for External Memory
+RD     BIT   0B7h   ;P3.7 - Read Control for External Memory
+PX0    BIT   0B8h   ;IP.0 - External Interrupt 0 Priority
+PT0    BIT   0B9h   ;IP.1 - Timer 0 Priority
+PX1    BIT   0BAh   ;IP.2 - External Interrupt 1 Priority
+PT1    BIT   0BBh   ;IP.3 - Timer 1 Priority
+PS     BIT   0BCh   ;IP.4 - Serial Port Priority
+P      BIT   0D0h   ;PSW.0 - Accumulator Parity Flag
+OV     BIT   0D2h   ;PSW.2 - Overflow Flag
+RS0    BIT   0D3h   ;PSW.3 - Register Bank Select 0
+RS1    BIT   0D4h   ;PSW.4 - Register Bank Select 1
+F0     BIT   0D5h   ;PSW.5 - Flag 0
+AC     BIT   0D6h   ;PSW.6 - Auxiliary Carry Flag
+CY     BIT   0D7h   ;PSW.7 - Carry Flag

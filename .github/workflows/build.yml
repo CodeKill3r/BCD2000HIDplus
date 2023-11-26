@@ -12,7 +12,8 @@ jobs:
       - name: Install DOSBox
         run: choco install dosbox
 
-      - run: type "C:\ProgramData\chocolatey\logs\chocolatey.log"
+      - run: dir C:\Program Files (x86)\
+      - run: dir C:\Program Files\
 
       - name: Run Compiler in DOSBox
         run: |

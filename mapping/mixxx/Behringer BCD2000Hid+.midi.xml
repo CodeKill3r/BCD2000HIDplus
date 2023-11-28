@@ -1,10 +1,10 @@
 <MixxxMIDIPreset mixxxVersion="1.8.0+" schemaVersion="1">
     <info>
-      <name>Behringer BCD2000 HID+</name>
-      <author>Xav</author>
-      <description>MIDI mapping for Behringer BCD2000 mixer</description>
-      <forums>https://mixxx.discourse.group/t/beringher-bcd2000-revival-led-issue/24863</forums>
-      <manual>behringer_b_control_deejay_BCD2000</manual>
+        <name>Behringer BCD2000 HID+</name>
+        <author>Xav</author>
+        <description>MIDI mapping for Behringer BCD2000 mixer</description>
+        <forums>https://mixxx.discourse.group/t/beringher-bcd2000-revival-led-issue/24863</forums>
+        <manual>behringer_b_control_deejay_BCD2000</manual>
     </info>
     <controller id="BCD2000HID+">
         <scriptfiles>
@@ -47,7 +47,7 @@
             <!-- SHIFT : "On air" button -->
             <control>
                 <description>"On air" button => SHIFT</description>
-                <key>BehringerBCD2020.shifter.input</key>
+                <key>BCD.shifter.input</key>
                 <status>0x90</status>
                 <midino>0x1E</midino>
                 <options>
@@ -57,7 +57,7 @@
             <!-- MICROPHONE : "Talkover" button-->
             <control>
                 <description>"talkover"</description>
-                <key>BehringerBCD2020.talkOver</key>
+                <key>BCD.talkOver</key>
                 <status>0x90</status>
                 <midino>0x1D</midino>
                 <options>
@@ -253,7 +253,7 @@
             <!-- Scratch -->
             <control>
                 <group>[Channel1]</group>
-                <key>BehringerBCD2020.scratchButton</key>
+                <key>BCD.scratchButton</key>
                 <status>0x90</status>
                 <midino>0x11</midino>
                 <options>
@@ -262,7 +262,7 @@
             </control>
             <control>
                 <group>[Channel1]</group>
-                <key>BehringerBCD2020.jogWheel</key>
+                <key>BCD.jogWheel</key>
                 <status>0xB0</status>
                 <midino>0x13</midino>
                 <options>
@@ -456,7 +456,7 @@
             <!-- SCRATCH -->
             <control>
                 <group>[Channel2]</group>
-                <key>BehringerBCD2020.jogWheel</key>
+                <key>BCD.jogWheel</key>
                 <status>0xB0</status>
                 <midino>0x12</midino>
                 <options>
@@ -465,7 +465,7 @@
             </control>
             <control>
                 <group>[Channel2]</group>
-                <key>BehringerBCD2020.scratchButton</key>
+                <key>BCD.scratchButton</key>
                 <status>0x90</status>
                 <midino>0x19</midino>
                 <options>
@@ -476,7 +476,7 @@
             <!-- EffectRack1_EffectUnit1 -->
             <control>
                 <group>[EffectRack1_EffectUnit1_Effect1]</group>
-                <key>BehringerBCD2020.effectUnit.knobs[1].input</key>
+                <key>BCD.effectUnit.knobs[1].input</key>
                 <status>0xB0</status>
                 <midino>0x0D</midino>
                 <options>
@@ -485,7 +485,7 @@
             </control>
             <control>
                 <group>[EffectRack1_EffectUnit1_Effect1]</group>
-                <key>BehringerBCD2020.effectUnit.knobs[2].input</key>
+                <key>BCD.effectUnit.knobs[2].input</key>
                 <status>0xB0</status>
                 <midino>0x0E</midino>
                 <options>
@@ -494,7 +494,7 @@
             </control>
             <control>
                 <group>[EffectRack1_EffectUnit1_Effect1]</group>
-                <key>BehringerBCD2020.effectUnit.knobs[3].input</key>
+                <key>BCD.effectUnit.knobs[3].input</key>
                 <status>0xB0</status>
                 <midino>0x0F</midino>
                 <options>
@@ -503,7 +503,7 @@
             </control>
             <control>
                 <group>[EffectRack1_EffectUnit1]</group>
-                <key>BehringerBCD2020.effectUnit.dryWetKnob.input</key>
+                <key>BCD.effectUnit.dryWetKnob.input</key>
                 <status>0xB0</status>
                 <midino>0x10</midino>
                 <options>
@@ -512,7 +512,7 @@
             </control>
             <control>
                 <group>[EffectRack1_EffectUnit1_Effect1]</group>
-                <key>BehringerBCD2020.effectUnit.enableButtons[1].input</key>
+                <key>BCD.effectUnit.enableButtons[1].input</key>
                 <status>0x90</status>
                 <midino>0x1F</midino>
                 <options>
@@ -521,7 +521,7 @@
             </control>
             <control>
                 <group>[EffectRack1_EffectUnit1]</group>
-                <key>BehringerBCD2020.effectUnit.enableButtons[2].input</key>
+                <key>BCD.effectUnit.enableButtons[2].input</key>
                 <status>0x90</status>
                 <midino>0x20</midino>
                 <options>
@@ -530,7 +530,7 @@
             </control>
             <control>
                 <group>[EffectRack1_EffectUnit1]</group>
-                <key>BehringerBCD2020.effectUnit.enableButtons[3].input</key>
+                <key>BCD.effectUnit.enableButtons[3].input</key>
                 <status>0x90</status>
                 <midino>0x21</midino>
                 <options>
@@ -539,7 +539,7 @@
             </control>
             <control>
                 <group>[EffectRack1_EffectUnit1]</group>
-                <key>BehringerBCD2020.effectUnit.effectFocusButton.input</key>
+                <key>BCD.effectUnit.effectFocusButton.input</key>
                 <status>0x90</status>
                 <midino>0x22</midino>
                 <options>
